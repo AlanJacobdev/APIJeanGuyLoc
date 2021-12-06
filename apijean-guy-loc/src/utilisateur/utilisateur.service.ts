@@ -10,8 +10,10 @@ export class UtilisateurService {
   
   constructor( @InjectRepository(Utilisateur) private utilisateurRepo : Repository<Utilisateur>  ){}
   
-  create(createUtilisateurDto: CreateUtilisateurDto) {
-    return 'This action adds a new utilisateur';
+  async create(createUtilisateurDto: CreateUtilisateurDto) {
+    const utilisateur = await this.utilisateurRepo.create(createUtilisateurDto);
+    await this.utilisateurRepo.save(utilisateur);
+    return utilisateur;
   }
 
   async findAll() {
