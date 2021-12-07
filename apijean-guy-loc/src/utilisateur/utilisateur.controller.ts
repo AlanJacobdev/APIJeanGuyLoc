@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put } from '@nestjs/common';
 import { UtilisateurService } from './utilisateur.service';
 import { CreateUtilisateurDto } from './dto/create-utilisateur.dto';
 import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
+
 
 @Controller('utilisateur')
 export class UtilisateurController {
@@ -9,7 +10,7 @@ export class UtilisateurController {
 
   @Post()
   create(@Body() createUtilisateurDto: CreateUtilisateurDto) {
-    return this.utilisateurService.create(createUtilisateurDto);
+    return this.utilisateurService.create(createUtilisateurDto)
   }
 
   @Get()
@@ -27,9 +28,9 @@ export class UtilisateurController {
     return this.utilisateurService.findOne(monUtilisateur.pseudonyme, monUtilisateur.motDePasse);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateUtilisateurDto: UpdateUtilisateurDto) {
-    return this.utilisateurService.update(+id, updateUtilisateurDto);
+    return this.utilisateurService.update( id, updateUtilisateurDto);
   }
 
   @Delete(':id')
