@@ -38,20 +38,34 @@ export class UtilisateurService {
     })
   }
 
-  async update(idUser : string, updateUtilisateurDto: UpdateUtilisateurDto) {
+  async update(idUser : number, updateUtilisateurDto: UpdateUtilisateurDto) {
+    try {
+      const User = await this.utilisateurRepo.findOneOrFail(idUser);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
     
-    const User = await this.utilisateurRepo.findOneOrFail(idUser);
-    if (!User.idUtilisateur) {
-      // tslint:disable-next-line:no-console
-      console.error("User doesn't exist");
-    } 
     
     await this.utilisateurRepo.update(idUser, updateUtilisateurDto);
     return await this.utilisateurRepo.findOne(idUser)
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} utilisateur`;
+  async remove(id: number) {
+    try {
+      const User = await this.utilisateurRepo.findOneOrFail(id);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+    
+    await this.utilisateurRepo.delete(id);
+    return {delete : true};
   }
 }
 
