@@ -32,7 +32,7 @@ export class RealisateurService {
     return `This action updates a #${id} realisateur`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} realisateur`;
+  async remove(id: number) {
+    return await this.realisateurRepo.delete(id);
   }
 }

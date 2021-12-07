@@ -32,7 +32,7 @@ export class ActeurService {
     return `This action updates a #${id} acteur`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} acteur`;
+  async remove(id: number) {
+    return await this.acteurRepo.delete(id);
   }
 }
