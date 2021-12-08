@@ -23,8 +23,8 @@ export class UtilisateurController {
   //   return this.utilisateurService.findOne(login, pass);
   // }
 
-  @Get()
-  findOne(@Body('login') monUtilisateur: CreateUtilisateurDto) {
+  @Get('/oneUser')
+  findOne(@Body() monUtilisateur: CreateUtilisateurDto) {
     return this.utilisateurService.findOne(monUtilisateur.pseudonyme, monUtilisateur.motDePasse);
   }
 
