@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateActeurDto } from './dto/create-acteur.dto';
@@ -28,11 +28,31 @@ export class ActeurService {
     })
   }
 
-  update(id: number, updateActeurDto: UpdateActeurDto) {
-    return `This action updates a #${id} acteur`;
+  async update(idActeur: number, updateActeurDto: UpdateActeurDto) {
+    try {
+      const Acteur = await this.acteurRepo.findOneOrFail(idActeur);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+    
+    await this.acteurRepo.update(idActeur, updateActeurDto);
+    return await this.acteurRepo.findOne(idActeur);
   }
 
-  async remove(id: number) {
-    return await this.acteurRepo.delete(id);
+  async remove(idActeur: number) {
+    try {
+      const Acteur = await this.acteurRepo.findOneOrFail(idActeur);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+
+    await this.acteurRepo.delete(idActeur);
+    return {}; // Json validation 200 ?
   }
 }
