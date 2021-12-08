@@ -18,15 +18,12 @@ export class UtilisateurController {
     return this.utilisateurService.findAll();
   }
 
-  // @Get('/:login/:pass')
-  // findOne(@Param('login') login: string, @Param('pass') pass: string) {
-  //   return this.utilisateurService.findOne(login, pass);
-  // }
-
-  @Get('/oneUser')
-  findOne(@Body() monUtilisateur: CreateUtilisateurDto) {
-    return this.utilisateurService.findOne(monUtilisateur.pseudonyme, monUtilisateur.motDePasse);
+  @Get('/:login/:pass')
+  findOne(@Param('login') login: string, @Param('pass') pass: string) {
+    return this.utilisateurService.findOne(login, pass);
   }
+
+
 
   @Put(':id')
   update(@Param('id') id: number, @Body() updateUtilisateurDto: Partial<UpdateUtilisateurDto>) {
