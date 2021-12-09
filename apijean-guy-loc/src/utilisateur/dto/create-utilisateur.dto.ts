@@ -4,4 +4,5 @@ export class CreateUtilisateurDto {
     adresse    : string;
     nom        : string;
     prenom     : string;
+    estAdmin   : boolean;
 }
