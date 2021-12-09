@@ -5,10 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './ormconfig';
 import { UtilisateurController } from './utilisateur/utilisateur.controller';
 import { UtilisateurModule } from './utilisateur/utilisateur.module';
+import { ActeurController } from './acteur/acteur.controller';
+import { RealisateurController } from './realisateur/realisateur.controller';
+import { ActeurModule } from './acteur/acteur.module';
+import { RealisateurModule } from './realisateur/realisateur.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config), UtilisateurModule
+    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule
   ],
   controllers: [AppController],
   providers: [AppService],
