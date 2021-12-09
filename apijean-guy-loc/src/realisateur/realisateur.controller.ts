@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { RealisateurService } from './realisateur.service';
 import { CreateRealisateurDto } from './dto/create-realisateur.dto';
 import { UpdateRealisateurDto } from './dto/update-realisateur.dto';
@@ -22,7 +22,7 @@ export class RealisateurController {
     return this.realisateurService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateRealisateurDto: UpdateRealisateurDto) {
     return this.realisateurService.update(+id, updateRealisateurDto);
   }
