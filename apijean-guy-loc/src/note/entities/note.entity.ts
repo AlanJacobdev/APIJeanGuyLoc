@@ -1,4 +1,4 @@
-import { Column, Double, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('NoteFilm')
 export class Note {
@@ -9,7 +9,7 @@ export class Note {
     @Column()
     idFilm : number;
     
-    @Column() 
+    @Column({type : "float"}) 
     valeur : number;
 
 }
