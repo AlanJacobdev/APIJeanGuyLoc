@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { TypefilmService } from './typefilm.service';
 import { CreateTypeFilmDto } from './dto/create-typefilm.dto';
 import { UpdateTypeFilmDto } from './dto/update-typefilm.dto';
@@ -18,17 +18,17 @@ export class TypefilmController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.typefilmService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.typefilmService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTypefilmDto: UpdateTypeFilmDto) {
-    return this.typefilmService.update(+id, updateTypefilmDto);
+  @Put(':id')
+  update(@Param('id') id: number, @Body() updateTypefilmDto: UpdateTypeFilmDto) {
+    return this.typefilmService.update(id, updateTypefilmDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.typefilmService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.typefilmService.remove(id);
   }
 }

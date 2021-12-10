@@ -22,19 +22,45 @@ export class FilmService {
     }
   }
 
-  findAll() {
-    return `This action returns all film`;
+  async findAll() {
+    return await this.FilmRepo.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} film`;
+    return this.FilmRepo.findOne( {
+      where : {
+        idFilm : id
+      }
+    })
   }
 
-  update(id: number, updateFilmDto: UpdateFilmDto) {
-    return `This action updates a #${id} film`;
+  async update(id: number, updateFilmDto: UpdateFilmDto) {
+    try {
+      const User = await this.FilmRepo.findOneOrFail(id);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+    
+    
+    await this.FilmRepo.update(id, updateFilmDto);
+    return await this.FilmRepo.findOne(id)
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} film`;
+  async remove(id: number) {
+    try {
+      const Film = await this.FilmRepo.findOneOrFail(id);
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+    
+    await this.FilmRepo.delete(id);
+    return {delete : true};
   }
 }

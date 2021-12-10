@@ -8,8 +8,7 @@ export class Film {
     @PrimaryGeneratedColumn()
     idFilm : number
 
-    
-    @Column({ unique: false })
+
     @ManyToOne(() => TypeFilm)
     @JoinColumn({name : 'idTypeFilm'})
     idTypeFilm : TypeFilm
@@ -31,7 +30,4 @@ export class Film {
 
     @Column('date') 
     dateSortie : Date
-
-
-
 }
