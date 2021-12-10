@@ -12,7 +12,7 @@ export class UtilisateurService {
   
   async create(createUtilisateurDto: CreateUtilisateurDto)  {
     try{
-      const utilisateur = await this.utilisateurRepo.create(createUtilisateurDto);
+      const utilisateur = this.utilisateurRepo.create(createUtilisateurDto);
       await this.utilisateurRepo.save(utilisateur);
       return utilisateur;
     } catch (e) {

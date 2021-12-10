@@ -1,5 +1,6 @@
+import { Transform } from "class-transformer";
 import { TypeFilm } from "src/typefilm/entities/typefilm.entity";
-import { Column, Entity, JoinColumn, JoinTable, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Film')
 export class Film {
@@ -7,10 +8,10 @@ export class Film {
     @PrimaryGeneratedColumn()
     idFilm : number
 
-    @OneToOne(() => TypeFilm, {
-        eager: true
-      })
-    @JoinColumn()
+    
+    @Column({ unique: false })
+    @ManyToOne(() => TypeFilm)
+    @JoinColumn({name : 'idTypeFilm'})
     idTypeFilm : TypeFilm
 
     @Column()
@@ -28,7 +29,7 @@ export class Film {
     @Column()
     duree : number
 
-    @Column()
+    @Column('date') 
     dateSortie : Date
 
 

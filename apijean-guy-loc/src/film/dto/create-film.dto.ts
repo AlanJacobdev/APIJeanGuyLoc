@@ -1,11 +1,10 @@
 import { IsNotEmpty } from "class-validator"
+import { TypeFilm } from "src/typefilm/entities/typefilm.entity"
 
 export class CreateFilmDto {
-    @IsNotEmpty()
-    idFilm : number
 
     @IsNotEmpty()
-    idTypeFilm : number 
+    idTypeFilm : TypeFilm 
 
     @IsNotEmpty()
     titre : string
