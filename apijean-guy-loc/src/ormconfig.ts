@@ -19,5 +19,5 @@ export const config: ConnectionOptions = {
       database: 'baljabzxzgoht9w2e3id',
       entities: ["dist/**/*.entity{.ts,.js}"],
       synchronize: true,
-    }
+}
  

@@ -21,7 +21,7 @@ export class Utilisateur {
     @Column() 
     prenom      : string;
 
-    @Column() 
+    @Column({default : false }) 
     estAdmin    : boolean;
     
 }
