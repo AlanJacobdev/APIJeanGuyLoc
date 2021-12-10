@@ -9,10 +9,11 @@ import { ActeurController } from './acteur/acteur.controller';
 import { RealisateurController } from './realisateur/realisateur.controller';
 import { ActeurModule } from './acteur/acteur.module';
 import { RealisateurModule } from './realisateur/realisateur.module';
+import { NoteModule } from './note/note.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule
+    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule
   ],
   controllers: [AppController],
   providers: [AppService],
