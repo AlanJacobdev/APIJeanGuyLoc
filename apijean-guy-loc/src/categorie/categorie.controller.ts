@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { CategorieService } from './categorie.service';
 import { CreateCategorieDto } from './dto/create-categorie.dto';
+import { CreateCategorie_FilmDto } from './dto/create-categorie_film.dto';
+import { RequestCategorie_FilmDto } from './dto/request-categories_film.dto';
 import { UpdateCategorieDto } from './dto/update-categorie.dto';
 
 @Controller('categorie')
@@ -10,6 +12,11 @@ export class CategorieController {
   @Post()
   create(@Body() createCategorieDto: CreateCategorieDto) {
     return this.categorieService.create(createCategorieDto);
+  }
+
+  @Post('/add')
+  AddCategorie(@Body() requestCategories_film : RequestCategorie_FilmDto) {
+    return this.categorieService.addCategorieToFilm(requestCategories_film);
   }
 
   @Get()
