@@ -23,7 +23,7 @@ export class ActeurService {
     
       // Si il existe alors on déroule les idActeurs
       requestActeurs_film.idActeurs.forEach(idActeur => {
-        const categorie = this.acteurRepo.findOneOrFail(idActeur);
+        const acteur = this.acteurRepo.findOneOrFail(idActeur);
   
         // Après vérification de l'existance de l'idActeur
         const acteurFilm_dto : CreateActeur_FilmDto = {

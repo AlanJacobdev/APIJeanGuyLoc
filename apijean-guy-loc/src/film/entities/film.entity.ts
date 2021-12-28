@@ -1,6 +1,7 @@
 import { Transform } from "class-transformer";
 import { Acteur } from "src/acteur/entities/acteur.entity";
 import { Categorie } from "src/categorie/entities/categorie.entity";
+import { Realisateur } from "src/realisateur/entities/realisateur.entity";
 import { TypeFilm } from "src/typefilm/entities/typefilm.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -60,4 +61,18 @@ export class Film {
         },
     })
     acteurs: Acteur[]
+
+    @ManyToMany(type => Realisateur, realisateur => realisateur.films)
+    @JoinTable({
+        name: "estRealisePar",
+        joinColumn: {
+            name: "idFilm",
+            referencedColumnName: "idFilm",
+        },
+        inverseJoinColumn: {
+            name: "idRealisateur",
+            referencedColumnName: "idRealisateur",
+        },
+    })
+    realisateurs: Realisateur[]
 }
