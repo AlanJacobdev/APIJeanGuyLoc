@@ -5,7 +5,6 @@ import { Categorie } from './entities/categorie.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { estDeCategorie } from './entities/categorie_film.entity';
 import { FilmService } from 'src/film/film.service';
-import { FilmModule } from 'src/film/film.module';
 import { Film } from 'src/film/entities/film.entity';
 
 @Module({

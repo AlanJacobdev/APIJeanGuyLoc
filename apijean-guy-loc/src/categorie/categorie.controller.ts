@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { CategorieService } from './categorie.service';
 import { CreateCategorieDto } from './dto/create-categorie.dto';
-import { CreateCategorie_FilmDto } from './dto/create-categorie_film.dto';
 import { RequestCategorie_FilmDto } from './dto/request-categories_film.dto';
 import { UpdateCategorieDto } from './dto/update-categorie.dto';
 

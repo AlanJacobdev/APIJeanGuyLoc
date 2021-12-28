@@ -4,12 +4,45 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateActeurDto } from './dto/create-acteur.dto';
 import { UpdateActeurDto } from './dto/update-acteur.dto';
 import { Acteur } from './entities/acteur.entity';
+import { RequestActeurs_FilmDto } from './dto/request-acteurs_film.dto';
+import { estActeurDans } from './entities/acteur_film.entity';
+import { FilmService } from 'src/film/film.service';
+import { CreateActeur_FilmDto } from './dto/create-acteur_film.dto';
 
 @Injectable()
 export class ActeurService {
 
-  constructor( @InjectRepository(Acteur) private acteurRepo : Repository<Acteur>){}
+  constructor( @InjectRepository(Acteur) private acteurRepo : Repository<Acteur>, 
+    @InjectRepository(estActeurDans) private estActeurDansRepo : Repository<estActeurDans>, 
+    private filmService : FilmService){}
 
+  async addActeurToFilm(requestActeurs_film : RequestActeurs_FilmDto) {
+    try {
+      // Recherche le film via idFilm
+      const film = this.filmService.findOne(requestActeurs_film.idFilm);
+    
+      // Si il existe alors on déroule les idActeurs
+      requestActeurs_film.idActeurs.forEach(idActeur => {
+        const categorie = this.acteurRepo.findOneOrFail(idActeur);
+  
+        // Après vérification de l'existance de l'idActeur
+        const acteurFilm_dto : CreateActeur_FilmDto = {
+          idFilm: requestActeurs_film.idFilm,
+          idActeur: idActeur
+        };
+  
+        this.estActeurDansRepo.save(acteurFilm_dto);
+      });
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: e,
+      }, HttpStatus.CONFLICT);
+    }
+
+    return {Link : true};
+  }
+  
   async create(createActeurDto: CreateActeurDto) {
     const acteur = await this.acteurRepo.create(createActeurDto);
     await this.acteurRepo.save(acteur);
