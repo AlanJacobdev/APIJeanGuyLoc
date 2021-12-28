@@ -46,6 +46,7 @@ export class CategorieService {
       console.log(categorieFilm_dto);
 
       console.log(this.estDeCategorieRepo.create(categorieFilm_dto));
+      this.estDeCategorieRepo.save(categorieFilm_dto);
     });
 
     return {Link : true};
