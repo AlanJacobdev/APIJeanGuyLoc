@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Film } from "src/film/entities/film.entity";
+import { Column, Entity, JoinTable, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
 
 @Entity('CategorieFilm')
 export class Categorie {
@@ -9,4 +10,17 @@ export class Categorie {
     @Column()
     nomCategorie : string;
     
+    @ManyToMany(type => Film, film => film.categories)
+    @JoinTable({
+        name: "estDeCategorie",
+        joinColumn: {
+            name: "idCategorie",
+            referencedColumnName: "idCategorie",
+        },
+        inverseJoinColumn: {
+            name: "idFilm",
+            referencedColumnName: "idFilm",
+        },
+    })
+    films: Film[]
 }
