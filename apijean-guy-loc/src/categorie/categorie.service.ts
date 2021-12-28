@@ -28,26 +28,28 @@ export class CategorieService {
   }
 
   async addCategorieToFilm(requestCategories_film : RequestCategorie_FilmDto) {
-    // Recherche le film via idFilm
-    console.log(requestCategories_film);
-    const film = this.filmService.findOne(requestCategories_film.idFilm);
+    try {
+      // Recherche le film via idFilm
+      const film = this.filmService.findOne(requestCategories_film.idFilm);
     
-    // Si il existe alors on déroule les idCategories
-    requestCategories_film.idCategories.forEach(idCategorie => {
-      const categorie = this.categorieRepo.findOneOrFail(idCategorie);
-
-      // Après vérification de l'existance de l'idCategorie
-      const categorieFilm_dto : CreateCategorie_FilmDto = {
-        idFilm: requestCategories_film.idFilm,
-        idCategorie: idCategorie
-      };
-      // categorieFilm_dto.idFilm = requestCategories_film.idFilm;
-      // categorieFilm_dto.idCategorie = idCategorie;
-      console.log(categorieFilm_dto);
-
-      console.log(this.estDeCategorieRepo.create(categorieFilm_dto));
-      this.estDeCategorieRepo.save(categorieFilm_dto);
-    });
+      // Si il existe alors on déroule les idCategories
+      requestCategories_film.idCategories.forEach(idCategorie => {
+        const categorie = this.categorieRepo.findOneOrFail(idCategorie);
+  
+        // Après vérification de l'existance de l'idCategorie
+        const categorieFilm_dto : CreateCategorie_FilmDto = {
+          idFilm: requestCategories_film.idFilm,
+          idCategorie: idCategorie
+        };
+  
+        this.estDeCategorieRepo.save(categorieFilm_dto);
+      });
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: e,
+      }, HttpStatus.CONFLICT);
+    }
 
     return {Link : true};
   }
