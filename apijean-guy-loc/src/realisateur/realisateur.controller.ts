@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { RealisateurService } from './realisateur.service';
 import { CreateRealisateurDto } from './dto/create-realisateur.dto';
 import { UpdateRealisateurDto } from './dto/update-realisateur.dto';
+import { RequestRealisateur_FilmDto } from './dto/request-realisateurs_film.dto';
 
 @Controller('realisateur')
 export class RealisateurController {
@@ -10,6 +11,11 @@ export class RealisateurController {
   @Post()
   create(@Body() createRealisateurDto: CreateRealisateurDto) {
     return this.realisateurService.create(createRealisateurDto);
+  }
+
+  @Post('/add')
+  AddRealisateur(@Body() requestRealisateur_Film : RequestRealisateur_FilmDto) {
+    return this.realisateurService.addRealisteurToFilm(requestRealisateur_Film);
   }
 
   @Get()
