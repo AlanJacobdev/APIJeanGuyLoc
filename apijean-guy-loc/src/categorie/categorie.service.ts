@@ -30,28 +30,36 @@ export class CategorieService {
   async addCategorieToFilm(requestCategories_film : RequestCategorie_FilmDto) {
     try {
       // Recherche le film via idFilm
-      const film = this.filmService.findOne(requestCategories_film.idFilm);
-    
-      // Si il existe alors on déroule les idCategories
-      requestCategories_film.idCategories.forEach(idCategorie => {
-        const categorie = this.categorieRepo.findOneOrFail(idCategorie);
-  
-        // Après vérification de l'existance de l'idCategorie
-        const categorieFilm_dto : CreateCategorie_FilmDto = {
-          idFilm: requestCategories_film.idFilm,
-          idCategorie: idCategorie
-        };
-  
-        this.estDeCategorieRepo.save(categorieFilm_dto);
-      });
+      const film = await this.filmService.findOne(requestCategories_film.idFilm);
+      if(film !== undefined) {
+        // Si il existe alors on déroule les idCategories
+        requestCategories_film.idCategories.forEach(async idCategorie => {
+          this.categorieRepo.findOne(idCategorie).then(categorie => {
+            if(categorie !== undefined) {
+              // Après vérification de l'existance de l'idCategorie
+              const categorieFilm_dto : CreateCategorie_FilmDto = {
+                idFilm: requestCategories_film.idFilm,
+                idCategorie: idCategorie
+              };
+
+              this.estDeCategorieRepo.save(categorieFilm_dto);
+            }
+          }).catch(e => {
+            throw new HttpException({
+              status: HttpStatus.CONFLICT,
+              error: e,
+            }, HttpStatus.CONFLICT);
+          });
+        });
+      } else {
+        return {Error : true};
+      }
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: e,
       }, HttpStatus.CONFLICT);
     }
-
-    return {Link : true};
   }
 
   async findAll() {
