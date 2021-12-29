@@ -25,28 +25,36 @@ export class RealisateurService {
   async addRealisteurToFilm(requestRealisateur_film : RequestRealisateur_FilmDto) {
     try {
       // Recherche le film via idFilm
-      const film = this.filmService.findOne(requestRealisateur_film.idFilm);
-    
-      // Si il existe alors on déroule les idCategories
-      requestRealisateur_film.idRealisateurs.forEach(idRealisateur => {
-        const realisateur = this.realisateurRepo.findOneOrFail(idRealisateur);
-  
-        // Après vérification de l'existance de l'idCategorie
-        const realisateurFilm_dto : CreateRealisateur_FilmDto = {
-          idFilm: requestRealisateur_film.idFilm,
-          idRealisateur: idRealisateur
-        };
-  
-        this.estRealiseParRepo.save(realisateurFilm_dto);
-      });
+      const film = await this.filmService.findOne(requestRealisateur_film.idFilm);
+      if(film !== undefined) {
+        // Si il existe alors on déroule les idCategories
+        requestRealisateur_film.idRealisateurs.forEach(idRealisateur => {
+          const realisateur = this.realisateurRepo.findOne(idRealisateur).then(realisateur => {
+            if(realisateur !== undefined) {
+              // Après vérification de l'existance de l'idCategorie
+              const realisateurFilm_dto : CreateRealisateur_FilmDto = {
+                idFilm: requestRealisateur_film.idFilm,
+                idRealisateur: idRealisateur
+              };
+
+              this.estRealiseParRepo.save(realisateurFilm_dto);
+            }
+          }).catch( e => {
+            throw new HttpException({
+              status: HttpStatus.CONFLICT,
+              error: e,
+            }, HttpStatus.CONFLICT);
+          })
+        });
+      } else {
+        return {Error : true};
+      }
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: e,
       }, HttpStatus.CONFLICT);
     }
-
-    return {Link : true};
   }
 
   async findAll() {
