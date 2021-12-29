@@ -17,7 +17,7 @@ export class TypefilmService {
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
-        error: e,
+        error: "Already exist",
       }, HttpStatus.CONFLICT);
     }
   }

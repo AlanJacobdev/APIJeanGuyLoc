@@ -1,13 +1,14 @@
 import { Film } from "src/film/entities/film.entity";
-import { Column, Entity, JoinTable, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Column, Entity, JoinTable, PrimaryGeneratedColumn, ManyToMany, Unique } from "typeorm";
 
 @Entity('CategorieFilm')
+@Unique(["nomCategorie"])
 export class Categorie {
 
     @PrimaryGeneratedColumn()
     idCategorie : number;
     
-    @Column()
+    @Column({ name : 'nomCategorie' })
     nomCategorie : string;
     
     @ManyToMany(type => Film, film => film.categories)

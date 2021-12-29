@@ -29,7 +29,7 @@ export class NoteService {
       }, HttpStatus.CONFLICT);
     }
 
-    const note = await this.noteRepo.create(createNoteDto);
+    const note = this.noteRepo.create(createNoteDto);
     await this.noteRepo.save(note);
     return note;
   }
