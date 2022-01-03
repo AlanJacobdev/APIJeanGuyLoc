@@ -51,6 +51,14 @@ export class NoteService {
     })
   }
 
+  async findNotes(idFilm: number) {
+    return await this.noteRepo.find( {
+      where : {
+        idFilm : idFilm
+      }
+    })
+  }
+
   async update(idNote: number, updateNoteDto: UpdateNoteDto) {
     try {
       const Note = await this.noteRepo.findOneOrFail(idNote);
