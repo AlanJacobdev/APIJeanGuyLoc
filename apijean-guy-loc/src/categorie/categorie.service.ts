@@ -106,5 +106,6 @@ export class CategorieService {
     }
     
     await this.categorieRepo.delete(idCategorie);
-    return {delete : true};  }
+    return {delete : true};  
+  }
 }
