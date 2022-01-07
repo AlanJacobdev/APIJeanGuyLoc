@@ -13,10 +13,12 @@ import { NoteModule } from './note/note.module';
 import { FilmModule } from './film/film.module';
 import { TypefilmModule } from './typefilm/typefilm.module';
 import { CategorieModule } from './categorie/categorie.module';
+import { LocationstreamingModule } from './locationstreaming/locationstreaming.module';
+import { LocationphysiqueModule } from './locationphysique/locationphysique.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule
+    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule, LocationstreamingModule, LocationphysiqueModule
   ],
   controllers: [AppController],
   providers: [AppService],

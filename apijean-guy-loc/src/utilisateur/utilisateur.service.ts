@@ -37,6 +37,14 @@ export class UtilisateurService {
     })
   }
 
+  async findOneById(id : number) {
+    return await this.utilisateurRepo.findOne( {
+      where : {
+        idUtilisateur : id 
+      }
+    })
+  }
+
   async update(idUser : number, updateUtilisateurDto: UpdateUtilisateurDto) {
     try {
       const User = await this.utilisateurRepo.findOneOrFail(idUser);
