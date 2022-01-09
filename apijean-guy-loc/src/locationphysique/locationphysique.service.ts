@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FilmService } from 'src/film/film.service';
+import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
 import { Repository } from 'typeorm';
 import { CreateLocationphysiqueDto } from './dto/create-locationphysique.dto';
 import { UpdateLocationphysiqueDto } from './dto/update-locationphysique.dto';
@@ -8,14 +10,28 @@ import { Locationphysique } from './entities/locationphysique.entity';
 @Injectable()
 export class LocationphysiqueService {
   
-  constructor( @InjectRepository(Locationphysique) private LocationPhysiqueRepo : Repository<Locationphysique> ) {}
+  constructor( @InjectRepository(Locationphysique) private LocationPhysiqueRepo : Repository<Locationphysique>, private filmservice : FilmService, private utilisateurservice: UtilisateurService ) {}
 
   
   async create(createLocationphysiqueDto: CreateLocationphysiqueDto) {
     try{
-      const film = this.LocationPhysiqueRepo.create(createLocationphysiqueDto);
-      await this.LocationPhysiqueRepo.save(film);
-      return film;
+      const filmExist = await this.filmservice.findOne(+createLocationphysiqueDto.idFilm);  
+      if(filmExist == undefined) {
+       return {
+        status: HttpStatus.CONFLICT,
+        error: "Unknow film"}
+      } else {
+        const utilisateurservice = await this.utilisateurservice.findOneById(+createLocationphysiqueDto.idUtilisateur);
+        if(utilisateurservice == undefined) {
+          return {
+           status: HttpStatus.CONFLICT,
+           error: "Unknow User"}
+         } else {
+          const film = this.LocationPhysiqueRepo.create(createLocationphysiqueDto);
+          await this.LocationPhysiqueRepo.save(film);
+          return film;
+         }
+      }
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
