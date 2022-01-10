@@ -98,45 +98,51 @@ export class LocationphysiqueService {
 
   async dispoPerMonth() {
     
-        var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-  
-       
-        const startDate = moment([y, m])
-        let firstDay = moment(startDate).startOf('month')
-        let endDay = moment(startDate).endOf('month')
+        var date = new Date();
         
-    
+        let calendar = [];
+
+        for (let i = 0; i <3 ; i++) {
+          let y = date.getFullYear(), m = date.getMonth()+i;
+          let startDate = moment([y, m])
+          let firstDay = moment(startDate).startOf('month')
+          let endDay = moment(startDate).endOf('month')
+
 
           let monthRange = moment.range(firstDay, endDay);
           
           let weeks = []
           for (let mday of monthRange.by('days')) {
-              // console.log("mday", mday.week());
+
               if (weeks.indexOf(mday.week()) === -1) {
                   weeks.push(mday.week());
               }
           }
       
-          let calendar = []
-          for (let index = 0; index < weeks.length; index++) {
-              var weeknumber = weeks[index];
-      
-      
-              let firstWeekDay = moment(firstDay).week(weeknumber).day(0);
-              if (firstWeekDay.isBefore(firstDay)) {
-                  firstWeekDay = firstWeekDay;
-              }
-      
-              let lastWeekDay = moment(endDay).week(weeknumber).day(6);
-              if (lastWeekDay.isAfter(endDay)) {
-                  lastWeekDay = lastWeekDay;
-              }
-      
-            
-              let weekRange = moment.range(firstWeekDay, lastWeekDay);
-              calendar.push(weekRange)
+          let index; 
+          if (i == 0){
+            index = 0;
+          } else {
+            index =1
           }
-          return calendar;
+
+          for (index; index < weeks.length; index++) {
+              var weeknumber = weeks[index];
+
+              let firstWeekDay = moment(firstDay).week(weeknumber-1).day(6);
+
+              let lastWeekDay = moment(endDay).week(weeknumber).day(6);
+              
+              let fw = firstWeekDay.format('DD-MM-YYYY'); 
+              let lw = lastWeekDay.format('DD-MM-YYYY'); 
+
+              calendar.push({
+                "start" : fw,
+                "end" :lw  
+              })
+          }
+        }
+        return calendar;
  
   }
   
