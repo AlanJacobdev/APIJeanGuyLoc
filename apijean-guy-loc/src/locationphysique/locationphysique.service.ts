@@ -1,11 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { FilmService } from 'src/film/film.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
 import { Repository } from 'typeorm';
 import { CreateLocationphysiqueDto } from './dto/create-locationphysique.dto';
 import { UpdateLocationphysiqueDto } from './dto/update-locationphysique.dto';
 import { Locationphysique } from './entities/locationphysique.entity';
+
+import * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
+
 
 @Injectable()
 export class LocationphysiqueService {
@@ -87,6 +94,50 @@ export class LocationphysiqueService {
     
     await this.LocationPhysiqueRepo.delete(id);
     return {delete : true};
+  }
+
+  async dispoPerMonth() {
+    
+        var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+  
+       
+        const startDate = moment([y, m])
+        let firstDay = moment(startDate).startOf('month')
+        let endDay = moment(startDate).endOf('month')
+        
+    
+
+          let monthRange = moment.range(firstDay, endDay);
+          
+          let weeks = []
+          for (let mday of monthRange.by('days')) {
+              // console.log("mday", mday.week());
+              if (weeks.indexOf(mday.week()) === -1) {
+                  weeks.push(mday.week());
+              }
+          }
+      
+          let calendar = []
+          for (let index = 0; index < weeks.length; index++) {
+              var weeknumber = weeks[index];
+      
+      
+              let firstWeekDay = moment(firstDay).week(weeknumber).day(0);
+              if (firstWeekDay.isBefore(firstDay)) {
+                  firstWeekDay = firstWeekDay;
+              }
+      
+              let lastWeekDay = moment(endDay).week(weeknumber).day(6);
+              if (lastWeekDay.isAfter(endDay)) {
+                  lastWeekDay = lastWeekDay;
+              }
+      
+            
+              let weekRange = moment.range(firstWeekDay, lastWeekDay);
+              calendar.push(weekRange)
+          }
+          return calendar;
+ 
   }
   
 }

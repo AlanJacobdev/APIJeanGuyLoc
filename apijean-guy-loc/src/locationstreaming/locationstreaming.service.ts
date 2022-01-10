@@ -88,4 +88,9 @@ export class LocationstreamingService {
     await this.LocationStreamingRepo.delete(id);
     return {delete : true};
   }
+
+  
+
+
+
 }
