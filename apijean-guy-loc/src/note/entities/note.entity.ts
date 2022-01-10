@@ -1,4 +1,5 @@
 import { Film } from "src/film/entities/film.entity";
+import { Utilisateur } from "src/utilisateur/entities/utilisateur.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('NoteFilm')
@@ -11,7 +12,11 @@ export class Note {
     @ManyToOne(() => Film)
     @JoinColumn({name : 'idFilm'})
     idFilm : Film
-    //idFilm : number;
+    
+    @Column("int" , {unique : true})
+    @ManyToOne(() => Utilisateur, { nullable: false })
+    @JoinColumn({name : 'idUtilisateur'})
+    idUtilisateur : Utilisateur
     
     @Column({type : "float"}) 
     valeur : number;
