@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NoteService } from 'src/note/note.service';
 import { Repository } from 'typeorm';
 import { CreateCommentaireDto } from './dto/create-commentaire.dto';
 import { UpdateCommentaireDto } from './dto/update-commentaire.dto';
@@ -7,10 +8,24 @@ import { Commentaire } from './entities/commentaire.entity';
 
 @Injectable()
 export class CommentaireService {
-  constructor(@InjectRepository(Commentaire) private commentaireRepo : Repository<Commentaire>){}
+  constructor(@InjectRepository(Commentaire) private commentaireRepo : Repository<Commentaire>, private noteService : NoteService){}
 
-  create(createCommentaireDto: CreateCommentaireDto) {
-    return 'This action adds a new commentaire';
+  async create(createCommentaireDto: CreateCommentaireDto) {
+      try {
+        // Recherche de la note via idNote
+        const note = await this.noteService.findOne(+createCommentaireDto.idNote);
+        if(note !== undefined) {
+          // Si il existe alors on effectue l'ajout
+          this.commentaireRepo.save(createCommentaireDto);
+        } else {
+          return {Error : true};
+        }
+      } catch (e) {
+        throw new HttpException({
+          status: HttpStatus.CONFLICT,
+          error: e,
+        }, HttpStatus.CONFLICT);
+      }
   }
 
   async findAll() {

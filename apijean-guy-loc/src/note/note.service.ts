@@ -13,7 +13,7 @@ export class NoteService {
   constructor( @InjectRepository(Note) private noteRepo : Repository<Note>, private filmService : FilmService){}
 
   async create(createNoteDto: CreateNoteDto) {
-    const film = await this.filmService.findOne(parseInt("" + createNoteDto.idFilm));
+    const film = await this.filmService.findOne(+createNoteDto.idFilm);
       if(film !== undefined) {
         if(createNoteDto.valeur > 5 || createNoteDto.valeur < 0) {
           throw new HttpException({
