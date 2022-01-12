@@ -11,6 +11,7 @@ import { Locationphysique } from './entities/locationphysique.entity';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
+
 const moment = extendMoment(Moment);
 
 
@@ -34,9 +35,16 @@ export class LocationphysiqueService {
            status: HttpStatus.CONFLICT,
            error: "Unknow User"}
          } else {
-          const film = this.LocationPhysiqueRepo.create(createLocationphysiqueDto);
-          await this.LocationPhysiqueRepo.save(film);
-          return film;
+            if (await this.findLocationExistante(createLocationphysiqueDto.dateDeLocation, +createLocationphysiqueDto.duree, +createLocationphysiqueDto.idFilm) == undefined){
+              const film = this.LocationPhysiqueRepo.create(createLocationphysiqueDto);
+              await this.LocationPhysiqueRepo.save(film);
+              return film;
+            } else {
+              return {
+                status: HttpStatus.CONFLICT,
+                error: "Date already exist"
+              }
+            }
          }
       }
     } catch (e) {
@@ -46,6 +54,41 @@ export class LocationphysiqueService {
       }, HttpStatus.CONFLICT);
     }
   }
+
+   async findLocationExistante(date : Date, duree : number, idFilm : number) {
+    const dateN = new Date(date);
+    dateN.setDate(dateN.getDate()+7);
+    
+    if (duree === 7 ){
+        return await this.LocationPhysiqueRepo.findOne( {
+          where : {
+            dateDeLocation : date,
+            idFilm : idFilm
+          }
+        })
+      } else if (duree === 14) {
+        
+        return await this.LocationPhysiqueRepo.findOne( {
+          where : [{
+            dateDeLocation : date,
+            idFilm : idFilm
+          },{
+            dateDeLocation : dateN.toISOString().slice(0, 10),
+            idFilm : idFilm
+          }]
+        })
+      }
+  }
+  
+  async findLocationExistanteWithDate(date : Date, idFilm : number) {
+    return await this.LocationPhysiqueRepo.findOne( {
+      where : {
+        dateDeLocation : date,
+        idFilm : idFilm
+      }
+    })
+  }
+
 
   async findAll() {
     return await this.LocationPhysiqueRepo.find();
@@ -96,7 +139,7 @@ export class LocationphysiqueService {
     return {delete : true};
   }
 
-  async dispoPerMonth() {
+  async dispoPerMonth(id:number) {
     
         var date = new Date();
         
@@ -136,6 +179,7 @@ export class LocationphysiqueService {
               let fw = firstWeekDay.format('DD-MM-YYYY'); 
               let lw = lastWeekDay.format('DD-MM-YYYY'); 
 
+              
               calendar.push({
                 "start" : fw,
                 "end" :lw  

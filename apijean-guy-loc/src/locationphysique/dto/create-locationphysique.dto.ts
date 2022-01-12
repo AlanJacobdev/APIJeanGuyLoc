@@ -6,10 +6,10 @@ export class CreateLocationphysiqueDto {
     
 
     @IsNotEmpty()
-    dateDeLocation : string;
+    dateDeLocation : Date;
     
     @IsNotEmpty()
-    duree : string;
+    duree : number;
 
     @IsNotEmpty()
     idUtilisateur : Utilisateur;

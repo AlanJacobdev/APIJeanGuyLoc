@@ -8,11 +8,11 @@ export class Locationphysique {
     @PrimaryGeneratedColumn()
     idLocationFilm : number;
     
-    @Column()
-    dateDeLocation : string;
+    @Column({type : "date"})
+    dateDeLocation : Date;
     
-    @Column() 
-    duree : string;
+    @Column({type : "int"}) 
+    duree : number;
 
     @Column({ unique: false })
     @ManyToOne(() => Utilisateur)
