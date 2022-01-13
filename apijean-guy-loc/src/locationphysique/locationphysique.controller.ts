@@ -17,7 +17,7 @@ export class LocationphysiqueController {
     return this.locationphysiqueService.findAll();
   }
 
-  @Get('dispo')
+  @Get('dispo/:id')
   getDisponibilite(@Param('id') id: number) {
     return this.locationphysiqueService.dispoPerMonth(id);
   }

@@ -81,9 +81,11 @@ export class LocationphysiqueService {
   }
   
   async findLocationExistanteWithDate(date : Date, idFilm : number) {
+    const dateN = new Date(date);
+    console.log(dateN.toISOString().slice(0, 10));
     return await this.LocationPhysiqueRepo.findOne( {
       where : {
-        dateDeLocation : date,
+        dateDeLocation : dateN.toISOString().slice(0, 10),
         idFilm : idFilm
       }
     })
@@ -168,6 +170,7 @@ export class LocationphysiqueService {
           } else {
             index =1
           }
+          let bool = false;
 
           for (index; index < weeks.length; index++) {
               var weeknumber = weeks[index];
@@ -176,13 +179,19 @@ export class LocationphysiqueService {
 
               let lastWeekDay = moment(endDay).week(weeknumber).day(6);
               
-              let fw = firstWeekDay.format('DD-MM-YYYY'); 
-              let lw = lastWeekDay.format('DD-MM-YYYY'); 
+              let fw = firstWeekDay.format('YYYY-MM-DD'); 
+              let lw = lastWeekDay.format('YYYY-MM-DD'); 
 
+              if( await this.findLocationExistanteWithDate(new Date(fw),id) == undefined) {
+                bool = true;
+              }else{
+                bool= false;
+              }
               
               calendar.push({
                 "start" : fw,
-                "end" :lw  
+                "end" :lw,
+                "dispo" : bool
               })
           }
         }
