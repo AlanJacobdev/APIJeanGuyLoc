@@ -82,7 +82,7 @@ export class LocationphysiqueService {
   
   async findLocationExistanteWithDate(date : Date, idFilm : number) {
     const dateN = new Date(date);
-    console.log(dateN.toISOString().slice(0, 10));
+
     return await this.LocationPhysiqueRepo.findOne( {
       where : {
         dateDeLocation : dateN.toISOString().slice(0, 10),

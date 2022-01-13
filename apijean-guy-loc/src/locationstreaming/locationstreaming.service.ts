@@ -28,7 +28,7 @@ export class LocationstreamingService {
            status: HttpStatus.CONFLICT,
            error: "Unknow User"}
          } else {
-           if (this.findIfAlreadyExist(+createLocationstreamingDto.idFilm, +createLocationstreamingDto.idUtilisateur, createLocationstreamingDto.dateDeLocation) === undefined){
+           if (await this.findIfAlreadyExist(+createLocationstreamingDto.idFilm, +createLocationstreamingDto.idUtilisateur, createLocationstreamingDto.dateDeLocation) === undefined){
             const film = this.LocationStreamingRepo.create(createLocationstreamingDto);
             await this.LocationStreamingRepo.save(film);
             return film;
@@ -79,7 +79,7 @@ export class LocationstreamingService {
     for (let i = 0; i < tabRes.length; i++) {
       let dateDebut = new Date(tabRes[i].dateDeLocation);
       let dateFin = new Date(tabRes[i].dateDeLocation);
-      dateFin.setDate(dateFin.getDate()+parseInt(tabRes[i].duree));      
+      await dateFin.setDate(dateFin.getDate()+parseInt(tabRes[i].duree));   
       if ( dateNew >= dateDebut && dateNew <= dateFin ){
         return tabRes[i];
       }
