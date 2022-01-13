@@ -13,7 +13,7 @@ export class Commentaire {
     @JoinColumn({name : 'idNote'})
     idNote : Note
 
-    @Column()
+    @Column({length: 2048})
     contenu : string;
 
     @Column('date') 
