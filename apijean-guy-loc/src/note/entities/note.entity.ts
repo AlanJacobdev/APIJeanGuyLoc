@@ -13,7 +13,7 @@ export class Note {
     @JoinColumn({name : 'idFilm'})
     idFilm : Film
     
-    @Column("int" , {unique : true})
+    @Column("int" , {unique : false})
     @ManyToOne(() => Utilisateur, { nullable: false })
     @JoinColumn({name : 'idUtilisateur'})
     idUtilisateur : Utilisateur
