@@ -8,8 +8,8 @@ export class Locationstreaming {
     @PrimaryGeneratedColumn()
     idLocationStreaming : number;
     
-    @Column()
-    dateDeLocation : string;
+    @Column({type : "date"})
+    dateDeLocation : Date;
     
     @Column() 
     duree : string;

@@ -22,10 +22,19 @@ export class LocationstreamingController {
     return this.locationstreamingService.findOne(+id);
   }
 
+  @Get('/checked/:idFilm/:idUti/:date')
+  findIfAlreadyExist(@Param('idFilm') idFilm: string,@Param('idUti') idUti : string, @Param('date') date : Date ) {
+    return this.locationstreamingService.findIfAlreadyExist(+idFilm, +idUti, date);
+  }
+  
+
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateLocationstreamingDto: UpdateLocationstreamingDto) {
     return this.locationstreamingService.update(+id, updateLocationstreamingDto);
   }
+
+  
 
   @Delete(':id')
   remove(@Param('id') id: string) {

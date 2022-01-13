@@ -5,7 +5,7 @@ import { Utilisateur } from "src/utilisateur/entities/utilisateur.entity";
 export class CreateLocationstreamingDto {
 
     @IsNotEmpty()
-    dateDeLocation : string;
+    dateDeLocation : Date;
     
     @IsNotEmpty()
     duree : string;
@@ -15,6 +15,4 @@ export class CreateLocationstreamingDto {
     
     @IsNotEmpty()
     idFilm : Film;
-    
-
 }

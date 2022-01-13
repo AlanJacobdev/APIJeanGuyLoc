@@ -4,7 +4,7 @@ import { FilmModule } from 'src/film/film.module';
 import { FilmService } from 'src/film/film.service';
 import { LocationphysiqueService } from 'src/locationphysique/locationphysique.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateLocationstreamingDto } from './dto/create-locationstreaming.dto';
 import { UpdateLocationstreamingDto } from './dto/update-locationstreaming.dto';
 import { Locationstreaming } from './entities/locationstreaming.entity';
@@ -42,7 +42,7 @@ export class LocationstreamingService {
   }
 
   async findAll() {
-    return await this.LocationStreamingRepo.findOneOrFail();
+    return await this.LocationStreamingRepo.find();
   }
 
   async findOne(id: number) {
@@ -59,6 +59,29 @@ export class LocationstreamingService {
       }, HttpStatus.NOT_FOUND);
     }
   }
+
+  async findIfAlreadyExist(idFilm : number, idUti : number, date: Date) {
+    
+    let dateNew = new Date (date);
+    let tabRes = await this.LocationStreamingRepo.find( {
+        where : {
+          idFilm : idFilm,
+          idUtilisateur : idUti
+        }
+      })
+
+    for (let i = 0; i < tabRes.length; i++) {
+      let dateDebut = new Date(tabRes[i].dateDeLocation);
+      let dateFin = new Date(tabRes[i].dateDeLocation);
+      dateFin.setDate(dateFin.getDate()+parseInt(tabRes[i].duree));      
+      if ( dateNew >= dateDebut && dateNew <= dateFin ){
+        return tabRes[i];
+      }
+    }
+      return undefined;
+  }
+
+
 
   async update(id: number, updateLocationstreamingDto: UpdateLocationstreamingDto) {
     try {
