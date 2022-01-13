@@ -28,9 +28,15 @@ export class LocationstreamingService {
            status: HttpStatus.CONFLICT,
            error: "Unknow User"}
          } else {
-          const film = this.LocationStreamingRepo.create(createLocationstreamingDto);
-          await this.LocationStreamingRepo.save(film);
-          return film;
+           if (this.findIfAlreadyExist(+createLocationstreamingDto.idFilm, +createLocationstreamingDto.idUtilisateur, createLocationstreamingDto.dateDeLocation) === undefined){
+            const film = this.LocationStreamingRepo.create(createLocationstreamingDto);
+            await this.LocationStreamingRepo.save(film);
+            return film;
+           } else {
+            return {
+              status: HttpStatus.CONFLICT,
+              error: "Already rent"}
+           }
          }
       }
     } catch (e) {
