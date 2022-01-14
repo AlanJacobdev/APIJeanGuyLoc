@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Repository } from 'typeorm';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
@@ -7,7 +8,7 @@ import { Film } from './entities/film.entity';
 
 @Injectable()
 export class FilmService {
-  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>) {}
+  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService) {}
 
   async create(createFilmDto: CreateFilmDto) {
     try{
@@ -26,8 +27,8 @@ export class FilmService {
     return await this.FilmRepo.find();
   }
 
-  async findCommentairesFromFilm(idFilm: number) {
-    return await this.FilmRepo.find();
+  async findCommentairesNotesFromFilm(idFilm: number) {
+    return await this.serviceNoteComm.getNoteFilmFromService(idFilm);
   }
   
   findOne(id: number) {

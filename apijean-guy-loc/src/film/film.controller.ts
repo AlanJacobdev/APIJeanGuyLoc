@@ -17,6 +17,11 @@ export class FilmController {
     return this.filmService.findAll();
   }
 
+  @Get('commentaires/:id')
+  findCommentaires(@Param('id') id: number) {
+    return this.filmService.findCommentairesNotesFromFilm(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.filmService.findOne(id);
