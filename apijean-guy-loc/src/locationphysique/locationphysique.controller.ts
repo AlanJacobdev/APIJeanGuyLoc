@@ -22,6 +22,11 @@ export class LocationphysiqueController {
     return this.locationphysiqueService.dispoPerMonth(id);
   }
 
+  @Get('FilmByUsers/:idFilm/:idUti')
+  findFilmByRenter(@Param('idFilm') idFilm: number, @Param('idUti') idUti: number ) {
+    return this.locationphysiqueService.findFilmByRenter(idUti, idFilm);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.locationphysiqueService.findOne(id);

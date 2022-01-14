@@ -66,6 +66,24 @@ export class LocationstreamingService {
     }
   }
 
+
+  async findFilmByRenter(idUti: number, idFilm : number) {
+    try {
+      return await this.LocationStreamingRepo.find( {
+        where : {
+          idFilm : idFilm,
+          idUtilisateur : idUti
+        }
+      })
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+  }
+
+
   async findIfAlreadyExist(idFilm : number, idUti : number, date: Date) {
     
     let dateNew = new Date (date);
@@ -117,9 +135,5 @@ export class LocationstreamingService {
     await this.LocationStreamingRepo.delete(id);
     return {delete : true};
   }
-
-  
-
-
 
 }

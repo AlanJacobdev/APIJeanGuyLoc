@@ -17,10 +17,16 @@ export class LocationstreamingController {
     return this.locationstreamingService.findAll();
   }
 
+  @Get('FilmByUsers/:idFilm/:idUti')
+  findFilmByRenter(@Param('idFilm') idFilm: number, @Param('idUti') idUti: number ) {
+    return this.locationstreamingService.findFilmByRenter(idUti, idFilm);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.locationstreamingService.findOne(+id);
   }
+
 
   @Get('/checked/:idFilm/:idUti/:date')
   findIfAlreadyExist(@Param('idFilm') idFilm: string,@Param('idUti') idUti : string, @Param('date') date : Date ) {

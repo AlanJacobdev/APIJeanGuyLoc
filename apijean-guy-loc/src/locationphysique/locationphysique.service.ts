@@ -96,6 +96,22 @@ export class LocationphysiqueService {
     return await this.LocationPhysiqueRepo.find();
   }
 
+  async findFilmByRenter(idUti: number, idFilm : number) {
+    try {
+      return await this.LocationPhysiqueRepo.find( {
+        where : {
+          idFilm : idFilm,
+          idUtilisateur : idUti
+        }
+      })
+    } catch (e) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Identifier Not Found',
+      }, HttpStatus.NOT_FOUND);
+    }
+  }
+
   async findOne(id: number) {
     try {
       return await this.LocationPhysiqueRepo.findOneOrFail( {
