@@ -7,7 +7,7 @@ import { Film } from './entities/film.entity';
 
 @Injectable()
 export class FilmService {
-  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film> ) {}
+  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>) {}
 
   async create(createFilmDto: CreateFilmDto) {
     try{
@@ -26,6 +26,10 @@ export class FilmService {
     return await this.FilmRepo.find();
   }
 
+  async findCommentairesFromFilm(idFilm: number) {
+    return await this.FilmRepo.find();
+  }
+  
   findOne(id: number) {
     return this.FilmRepo.findOne( {
       where : {

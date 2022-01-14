@@ -13,13 +13,17 @@ import { CategorieModule } from './categorie/categorie.module';
 import { CommentaireModule } from './commentaire/commentaire.module';
 import { LocationstreamingModule } from './locationstreaming/locationstreaming.module';
 import { LocationphysiqueModule } from './locationphysique/locationphysique.module';
+import { ServiceNoteCommService } from './service-note-comm/service-note-comm.service';
+import { Commentaire } from './commentaire/entities/commentaire.entity';
+import { Film } from './film/entities/film.entity';
+import { Note } from './note/entities/note.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule, CommentaireModule, LocationstreamingModule, LocationphysiqueModule
+    TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([Commentaire, Film, Note]), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule, CommentaireModule, LocationstreamingModule, LocationphysiqueModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ServiceNoteCommService],
 })
 export class AppModule {}
 

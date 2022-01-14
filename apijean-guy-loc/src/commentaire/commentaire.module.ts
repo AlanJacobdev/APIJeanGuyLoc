@@ -1,17 +1,16 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CommentaireService } from './commentaire.service';
 import { CommentaireController } from './commentaire.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Note } from 'src/note/entities/note.entity';
-import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 import { Commentaire } from './entities/commentaire.entity';
-import { NoteService } from 'src/note/note.service';
-import { FilmService } from 'src/film/film.service';
+import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
+import { FilmModule } from 'src/film/film.module';
 import { Film } from 'src/film/entities/film.entity';
+import { Note } from 'src/note/entities/note.entity';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Commentaire ,Note, Utilisateur, Film])],
+  imports :[TypeOrmModule.forFeature([Commentaire, Film, Note]), forwardRef(() => FilmModule), forwardRef(() => CommentaireModule)],
   controllers: [CommentaireController],
-  providers: [CommentaireService, NoteService, FilmService]
+  providers: [CommentaireService, ServiceNoteCommService]
 })
 export class CommentaireModule {}

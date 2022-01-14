@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NoteService } from 'src/note/note.service';
+import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Repository } from 'typeorm';
 import { CreateCommentaireDto } from './dto/create-commentaire.dto';
 import { UpdateCommentaireDto } from './dto/update-commentaire.dto';
@@ -8,12 +9,12 @@ import { Commentaire } from './entities/commentaire.entity';
 
 @Injectable()
 export class CommentaireService {
-  constructor(@InjectRepository(Commentaire) private commentaireRepo : Repository<Commentaire>, private noteService : NoteService){}
+  constructor(@InjectRepository(Commentaire) private commentaireRepo : Repository<Commentaire>, private serviceNoteComm : ServiceNoteCommService){}
 
   async create(createCommentaireDto: CreateCommentaireDto) {
       try {
         // Recherche de la note via idNote
-        const note = await this.noteService.findOne(+createCommentaireDto.idNote);
+        const note = await this.serviceNoteComm.getNoteFromService(+createCommentaireDto.idNote);
         if(note !== undefined) {
           // Si il existe alors on effectue l'ajout
           this.commentaireRepo.save(createCommentaireDto);

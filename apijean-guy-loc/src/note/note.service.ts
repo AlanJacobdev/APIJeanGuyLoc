@@ -5,15 +5,16 @@ import { Note } from './entities/note.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FilmService } from 'src/film/film.service';
+import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 
 
 @Injectable()
 export class NoteService {
 
-  constructor( @InjectRepository(Note) private noteRepo : Repository<Note>, private filmService : FilmService){}
+  constructor( @InjectRepository(Note) private noteRepo : Repository<Note>, private serviceNoteComm : ServiceNoteCommService){}
 
   async create(createNoteDto: CreateNoteDto) {
-    const film = await this.filmService.findOne(+createNoteDto.idFilm);
+    const film = await this.serviceNoteComm.getFilmFromService(+createNoteDto.idFilm);
       if(film !== undefined) {
         if(createNoteDto.valeur > 5 || createNoteDto.valeur < 0) {
           throw new HttpException({
