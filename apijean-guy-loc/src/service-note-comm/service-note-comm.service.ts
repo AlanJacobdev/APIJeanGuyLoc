@@ -1,45 +1,78 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Commentaire } from 'src/commentaire/entities/commentaire.entity';
 import { Film } from 'src/film/entities/film.entity';
 import { Note } from 'src/note/entities/note.entity';
+import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ServiceNoteCommService {
     constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, @InjectRepository(Note) private NoteRepo : Repository<Note>
-    , @InjectRepository(Commentaire) private CommentaireRepo : Repository<Commentaire>) {}
+    , @InjectRepository(Commentaire) private CommentaireRepo : Repository<Commentaire>, @InjectRepository(Utilisateur) private UserRepo : Repository<Utilisateur>) {}
+
+    // async getNoteFilmFromService(idFilm : number) {
+    //     this.NoteRepo.find({
+    //         where : {
+    //           idFilm : idFilm
+    //         }
+    //     }).then((notes: Note[]) => {
+    //             notes.forEach(note => {
+    //                this.CommentaireRepo.find({
+    //                     where : {
+    //                         idNote : note.idNote
+    //                     }   
+    //                 }).then((commentaires: Commentaire[]) => {
+    //                     const obj = {
+    //                         notes : notes,
+    //                         commentaires : commentaires
+    //                     };
+
+    //                     console.log(obj);
+    //                     return obj;
+    //                     // commentaires.forEach(commentaire => {
+    //                     // 
+    //                     // })
+    //                 }) 
+    //             });
+    //     }).catch(e => {
+    //         return {err: e}
+    //     })
+    //     return {err: "fin"}
+    // }
+
 
     async getNoteFilmFromService(idFilm : number) {
-        this.NoteRepo.find({
-            where : {
-              idFilm : idFilm
+        let res = [];
+        const notes = await this.NoteRepo.find({where: {idFilm : idFilm}})
+        if(notes != undefined){
+            for (const note of notes) {
+                const comm =  await this.CommentaireRepo.findOne({where:{idNote : note.idNote}})
+                if (comm != undefined) {
+                    const user = await this.UserRepo.findOne(note.idUtilisateur);
+                    res.push(
+                    {
+                        username : user.pseudonyme,
+                        idUtil : user.idUtilisateur,
+                        valeurNote : note.valeur,
+                        dateCom :comm.dateCommentaire ,
+                        textCom : comm.contenu,
+                        idCom : comm.idNote
+                    }
+                    )
+                }
             }
-        }).then((notes: Note[]) => {
-                notes.forEach(note => {
-                   this.CommentaireRepo.find({
-                        where : {
-                            idNote : note.idNote
-                        }   
-                    }).then((commentaires: Commentaire[]) => {
-                        const obj = {
-                            notes : notes,
-                            commentaires : commentaires
-                        };
+            return res;
+        } else {
+            return {
+                status : HttpStatus.NOT_FOUND,
+                error : 'Film doesn\'t exist'
+            }
+        }
 
-                        console.log(obj);
-                        return obj;
-                        // commentaires.forEach(commentaire => {
-                        // 
-                        // })
-                    }) 
-                });
-        }).catch(e => {
-            return {err: e}
-        })
-        return {err: "fin"}
     }
 
+    
     async getFilmFromService(idFilm : number) {
         const film = this.FilmRepo.findOne({
             where : {

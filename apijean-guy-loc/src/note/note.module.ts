@@ -8,9 +8,10 @@ import { FilmModule } from 'src/film/film.module';
 import { CommentaireModule } from 'src/commentaire/commentaire.module';
 import { Film } from 'src/film/entities/film.entity';
 import { Commentaire } from 'src/commentaire/entities/commentaire.entity';
+import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Note, Film, Commentaire]), forwardRef(() => FilmModule), forwardRef(() => CommentaireModule)],
+  imports :[TypeOrmModule.forFeature([Note, Film, Commentaire, Utilisateur]), forwardRef(() => FilmModule), forwardRef(() => CommentaireModule)],
   controllers: [NoteController],
   providers: [NoteService, ServiceNoteCommService]
 })

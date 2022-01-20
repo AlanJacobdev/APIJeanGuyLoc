@@ -12,9 +12,10 @@ import { CommentaireModule } from 'src/commentaire/commentaire.module';
 import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Note } from 'src/note/entities/note.entity';
 import { Commentaire } from 'src/commentaire/entities/commentaire.entity';
+import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Realisateur, estRealisePar, Film, Note, Commentaire]), forwardRef(() => FilmModule), forwardRef(() => NoteModule), forwardRef(() => CommentaireModule)],
+  imports :[TypeOrmModule.forFeature([Realisateur, estRealisePar, Film, Note, Commentaire, Utilisateur]), forwardRef(() => FilmModule), forwardRef(() => NoteModule), forwardRef(() => CommentaireModule)],
   controllers: [RealisateurController],
   providers: [RealisateurService, FilmService, ServiceNoteCommService]
 })
