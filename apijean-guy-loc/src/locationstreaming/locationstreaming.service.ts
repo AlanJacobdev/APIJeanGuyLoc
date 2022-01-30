@@ -1,10 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FilmModule } from 'src/film/film.module';
 import { FilmService } from 'src/film/film.service';
-import { LocationphysiqueService } from 'src/locationphysique/locationphysique.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
-import { Between, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateLocationstreamingDto } from './dto/create-locationstreaming.dto';
 import { UpdateLocationstreamingDto } from './dto/update-locationstreaming.dto';
 import { Locationstreaming } from './entities/locationstreaming.entity';

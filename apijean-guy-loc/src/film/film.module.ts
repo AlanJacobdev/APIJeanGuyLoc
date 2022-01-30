@@ -13,6 +13,7 @@ import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 @Module({
   imports :[TypeOrmModule.forFeature([Film, Note, Commentaire, Utilisateur]), forwardRef(() => NoteModule), forwardRef(() => CommentaireModule)],
   controllers: [FilmController],
-  providers: [FilmService, ServiceNoteCommService]
+  providers: [FilmService, ServiceNoteCommService],
+  exports : [FilmService]
 })
 export class FilmModule {}

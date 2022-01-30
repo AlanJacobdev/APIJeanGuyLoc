@@ -6,8 +6,9 @@ import { TypeFilm } from './entities/typefilm.entity';
 import { Film } from 'src/film/entities/film.entity';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([TypeFilm, Film])],
+  imports :[TypeOrmModule.forFeature([TypeFilm])],
   controllers: [TypefilmController],
-  providers: [TypefilmService]
+  providers: [TypefilmService],
+  exports : [TypefilmService]
 })
 export class TypefilmModule {}
