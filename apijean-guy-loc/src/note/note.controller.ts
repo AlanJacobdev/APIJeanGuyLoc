@@ -22,6 +22,11 @@ export class NoteController {
     return this.noteService.findNotes(+id);
   }
 
+  @Get('MoyenneFilm/:id')
+  getMoyenneByIdFilm(@Param('id') id: string) {
+    return this.noteService.getMoyenneByIdFilm(+id);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
     return this.noteService.update(+id, updateNoteDto);
