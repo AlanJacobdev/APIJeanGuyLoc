@@ -25,7 +25,7 @@ export class Film {
     @Column()
     lienBandeAnnonce : string
 
-    @Column()
+    @Column({length: 2048})
     synopsis : string
 
     @Column()
