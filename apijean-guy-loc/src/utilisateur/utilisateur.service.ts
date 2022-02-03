@@ -12,7 +12,7 @@ export class UtilisateurService {
   
   async create(createUtilisateurDto: CreateUtilisateurDto)  {
     const pseudo = this.findOneByPseudo(createUtilisateurDto.pseudonyme);
-    if (pseudo != undefined) {
+    if (pseudo == undefined) {
         const utilisateur = this.utilisateurRepo.create(createUtilisateurDto);
         await this.utilisateurRepo.save(utilisateur);
         return utilisateur;
@@ -26,7 +26,6 @@ export class UtilisateurService {
 
  async findAll() {
     return await this.utilisateurRepo.find();
-    //return `This action returns all utilisateur`;
   }
 
   async findOne(pseudo: string, mdp : string) {
@@ -49,7 +48,7 @@ export class UtilisateurService {
   async findOneByPseudo (pseudo : string) {
     return await this.utilisateurRepo.findOne({
       where : {
-        pseudo : pseudo
+        pseudonyme : pseudo
       }
     })
   }

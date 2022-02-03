@@ -9,6 +9,7 @@ import { Commentaire } from './entities/commentaire.entity';
 
 @Injectable()
 export class CommentaireService {
+
   constructor(@InjectRepository(Commentaire) private commentaireRepo : Repository<Commentaire>, private serviceNoteComm : ServiceNoteCommService){}
 
   async create(createCommentaireDto: CreateCommentaireDto) {
@@ -74,4 +75,9 @@ export class CommentaireService {
     
     await this.commentaireRepo.delete(id);
     return {delete : true};   }
+
+    async getCommentaireByUser(id: number) {
+      return await this.serviceNoteComm.getCommentaireByUser(id);
+    }
+
 }

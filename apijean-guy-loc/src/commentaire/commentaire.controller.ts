@@ -22,6 +22,11 @@ export class CommentaireController {
     return this.commentaireService.findOne(+id);
   }
 
+  @Get('/getCommentaireByUser/:id')
+  getCommentaireByUser(@Param('id') id: number) {
+    return this.commentaireService.getCommentaireByUser(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommentaireDto: UpdateCommentaireDto) {
     return this.commentaireService.update(+id, updateCommentaireDto);
