@@ -11,15 +11,16 @@ export class UtilisateurService {
   constructor( @InjectRepository(Utilisateur) private utilisateurRepo : Repository<Utilisateur>  ){}
   
   async create(createUtilisateurDto: CreateUtilisateurDto)  {
-    try{
-      const utilisateur = this.utilisateurRepo.create(createUtilisateurDto);
-      await this.utilisateurRepo.save(utilisateur);
-      return utilisateur;
-    } catch (e) {
-      throw new HttpException({
+    const pseudo = this.findOneByPseudo(createUtilisateurDto.pseudonyme);
+    if (pseudo != undefined) {
+        const utilisateur = this.utilisateurRepo.create(createUtilisateurDto);
+        await this.utilisateurRepo.save(utilisateur);
+        return utilisateur;
+    } else {
+      return {
         status: HttpStatus.CONFLICT,
-        error: 'Already Exists',
-      }, HttpStatus.CONFLICT);
+        error: 'Pseudonyme Already Exist',
+      }
     }
   }
 
@@ -41,6 +42,14 @@ export class UtilisateurService {
     return await this.utilisateurRepo.findOne( {
       where : {
         idUtilisateur : id 
+      }
+    })
+  }
+
+  async findOneByPseudo (pseudo : string) {
+    return await this.utilisateurRepo.findOne({
+      where : {
+        pseudo : pseudo
       }
     })
   }
