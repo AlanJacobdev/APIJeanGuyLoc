@@ -27,6 +27,11 @@ export class FilmController {
     return this.filmService.findOne(id);
   }
 
+  @Post('/getFilmRecent')
+  getFilmRecent() {
+    return this.filmService.getFilmRecent();
+  }
+
   @Put(':id')
   update(@Param('id') id: number, @Body() updateFilmDto: UpdateFilmDto) {
     return this.filmService.update(id, updateFilmDto);
@@ -36,4 +41,6 @@ export class FilmController {
   remove(@Param('id') id: number) {
     return this.filmService.remove(id);
   }
+
+
 }

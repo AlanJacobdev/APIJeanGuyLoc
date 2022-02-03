@@ -8,6 +8,7 @@ import { Film } from './entities/film.entity';
 
 @Injectable()
 export class FilmService {
+  
   constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService) {}
 
   async create(createFilmDto: CreateFilmDto) {
@@ -68,4 +69,19 @@ export class FilmService {
     await this.FilmRepo.delete(id);
     return {delete : true};
   }
+
+  async getFilmRecent() {
+    return await this.FilmRepo.find({
+      select : [
+        'idFilm',
+        'titre',
+        'lienImage'
+      ],
+      order: {
+        dateSortie : "DESC"
+      },
+      take : 10
+    });
+  }
+
 }
