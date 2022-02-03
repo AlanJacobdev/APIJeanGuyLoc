@@ -90,4 +90,35 @@ export class ServiceNoteCommService {
         });
         return note;
     }
+
+    async getCommentaireByUser( idUser : number){
+        let res = [];
+        const notes  = await this.NoteRepo.find({where :{idUtilisateur : idUser}});
+        if (notes != undefined && notes.length !== 0) {
+            for (const note of notes) {
+                const comm = await this.CommentaireRepo.findOne({where:{idNote : note.idNote}})
+                if( comm != undefined) {
+                    const film = await this.FilmRepo.findOne({where:{idFilm : note.idFilm}})
+                    res.push({
+                        note: note.valeur,
+                        commentaire : comm.contenu,
+                        idFilm : film.idFilm,
+                        nomFilm : film.titre,
+                        lienImage : film.lienImage
+                    })
+                   
+                }
+            }
+            return res;
+        } else {
+            return {
+                status : HttpStatus.NOT_FOUND,
+                error : 'User doesn\'t publish comments'
+            }
+        }
+       
+        
+    }
+
+
 }
