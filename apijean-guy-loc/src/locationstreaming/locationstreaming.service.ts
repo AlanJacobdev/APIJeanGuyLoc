@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilmService } from 'src/film/film.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateLocationstreamingDto } from './dto/create-locationstreaming.dto';
 import { UpdateLocationstreamingDto } from './dto/update-locationstreaming.dto';
 import { Locationstreaming } from './entities/locationstreaming.entity';
@@ -42,6 +42,55 @@ export class LocationstreamingService {
         status: HttpStatus.CONFLICT,
         error: e,
       }, HttpStatus.CONFLICT);
+    }
+  }
+
+  async getFilmPlusLoue() {
+    const d = new Date();
+    console.log(d);
+    let month = (d.getMonth() + 1).toString();
+    if(parseInt(month) < 10) {
+      month = "0" + month;
+    }
+
+    const myMap = new Map();
+    const Films = await this.LocationStreamingRepo.find({
+      where : {
+        dateDeLocation : Like("%-" + month + "-%")
+      }
+    });
+
+    for(const film of Films){
+      if(myMap.get(film.idFilm) != null) {
+        myMap.set(film.idFilm, myMap.get(film.idFilm) + 1);
+      } 
+      else {
+        myMap.set(film.idFilm, 1);
+      }
+    }
+
+    let idFilm = -1;
+    let maxLoc = 0;
+    for(const key of myMap.keys()) {
+      if(myMap.get(key) > maxLoc) {
+        maxLoc = myMap.get(key);
+        idFilm = key;
+      }
+    }
+    
+    if(idFilm != -1) {
+      const film = await this.filmservice.findOne(idFilm);
+      return {
+        idFIlm : film.idFilm,
+        lienImg : film.lienImage,
+        titre : film.titre
+      };
+    }
+    else {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        error: 'idFilm Not Found',   
+      }
     }
   }
 

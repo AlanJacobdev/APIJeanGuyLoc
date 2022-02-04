@@ -10,7 +10,7 @@ import { Locationphysique } from './entities/locationphysique.entity';
 
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
-
+import { Like } from 'typeorm';
 
 const moment = extendMoment(Moment);
 
@@ -141,6 +141,55 @@ export class LocationphysiqueService {
     
     await this.LocationPhysiqueRepo.update(id, updateLocationphysiqueDto);
     return await this.LocationPhysiqueRepo.findOne(id)
+  }
+
+  async getFilmPlusLoue() {
+    const d = new Date();
+    console.log(d);
+    let month = (d.getMonth() + 1).toString();
+    if(parseInt(month) < 10) {
+      month = "0" + month;
+    }
+
+    const myMap = new Map();
+    const Films = await this.LocationPhysiqueRepo.find({
+      where : {
+        dateDeLocation : Like("%-" + month + "-%")
+      }
+    });
+
+    for(const film of Films){
+      if(myMap.get(film.idFilm) != null) {
+        myMap.set(film.idFilm, myMap.get(film.idFilm) + 1);
+      } 
+      else {
+        myMap.set(film.idFilm, 1);
+      }
+    }
+
+    let idFilm = -1;
+    let maxLoc = 0;
+    for(const key of myMap.keys()) {
+      if(myMap.get(key) > maxLoc) {
+        maxLoc = myMap.get(key);
+        idFilm = key;
+      }
+    }
+    
+    if(idFilm != -1) {
+      const film = await this.filmservice.findOne(idFilm);
+      return {
+        idFIlm : film.idFilm,
+        lienImg : film.lienImage,
+        titre : film.titre
+      };
+    }
+    else {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        error: 'idFilm Not Found',   
+      }
+    }
   }
 
   async remove(id: number) {

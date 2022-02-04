@@ -27,6 +27,11 @@ export class LocationphysiqueController {
     return this.locationphysiqueService.findFilmByRenter(idUti, idFilm);
   }
 
+  @Get("/film/PlusLoue")
+  getFilmPlusLoue() {
+    return this.locationphysiqueService.getFilmPlusLoue();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.locationphysiqueService.findOne(id);

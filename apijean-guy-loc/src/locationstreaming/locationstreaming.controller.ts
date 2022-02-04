@@ -12,6 +12,11 @@ export class LocationstreamingController {
     return this.locationstreamingService.create(createLocationstreamingDto);
   }
 
+  @Get("/film/PlusLoue")
+  getFilmPlusLoue() {
+    return this.locationstreamingService.getFilmPlusLoue();
+  }
+
   @Get()
   findAll() {
     return this.locationstreamingService.findAll();
