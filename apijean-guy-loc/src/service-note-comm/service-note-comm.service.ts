@@ -121,4 +121,25 @@ export class ServiceNoteCommService {
     }
 
 
+    async getAllFilmWithNotes(){
+        let films = await this.FilmRepo.find();
+        let res = [];
+
+        for (const film of films) {
+            const moyenne = null ;
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
 }
