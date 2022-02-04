@@ -24,7 +24,6 @@ export class UtilisateurController {
   }
 
 
-
   @Put(':id')
   update(@Param('id') id: number, @Body() updateUtilisateurDto: Partial<UpdateUtilisateurDto>) {
     return this.utilisateurService.update(id, updateUtilisateurDto);

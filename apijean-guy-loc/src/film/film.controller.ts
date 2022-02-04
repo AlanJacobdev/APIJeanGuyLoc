@@ -17,6 +17,12 @@ export class FilmController {
     return this.filmService.findAll();
   }
 
+  @Get("listeFilms/getFilmsWithNote")
+  getAllFilmWithNotes() {
+    return this.filmService.getAllFilmWithNotes();
+  }
+
+
   @Get('commentaires/:id')
   findCommentaires(@Param('id') id: number) {
     return this.filmService.findCommentairesNotesFromFilm(id);
@@ -27,7 +33,7 @@ export class FilmController {
     return this.filmService.findOne(id);
   }
 
-  @Post('/getFilmRecent')
+  @Get('carrousel/getFilmRecents')
   getFilmRecent() {
     return this.filmService.getFilmRecent();
   }

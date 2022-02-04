@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NoteService } from 'src/note/note.service';
 import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Repository } from 'typeorm';
 import { CreateFilmDto } from './dto/create-film.dto';
@@ -9,7 +10,7 @@ import { Film } from './entities/film.entity';
 @Injectable()
 export class FilmService {
   
-  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService) {}
+  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService, private noteService : NoteService) {}
 
   async create(createFilmDto: CreateFilmDto) {
     try{
@@ -82,6 +83,29 @@ export class FilmService {
       },
       take : 10
     });
+  }
+
+  async getAllFilmWithNotes(){
+    let films = await this.FilmRepo.find();
+    let res = [];
+    if (films != undefined) {
+      for (const film of films) {
+          let moyenne = await this.noteService.getMoyenneByIdFilm(film.idFilm) ;
+            res.push({
+              idFilm : film.idFilm,
+              titre : film.titre,
+              lienImage : film.lienImage,
+              synopsis : film.synopsis,
+              moyenne : moyenne
+            })
+      }
+      return res;
+    } else {
+      return {
+        status : HttpStatus.NOT_FOUND,
+        error : "Zero films"
+      }
+    }
   }
 
 }

@@ -62,6 +62,7 @@ export class NoteService {
 
   async getMoyenneByIdFilm(idFilm: number) {
     const notes = await this.findNotes(idFilm);
+    if(notes.length !== 0) {
       let moyenne = 0.0;
       let nbNotes = notes.length;
 
@@ -70,7 +71,10 @@ export class NoteService {
       }
 
       moyenne = moyenne / nbNotes;
-      return { moyenne : moyenne };
+      return moyenne;
+    } else {
+      return 0;
+    }
   }
 
   async update(idNote: number, updateNoteDto: UpdateNoteDto) {
