@@ -24,7 +24,6 @@ export class LocationstreamingController {
 
   @Get("findAllById/:idFilm")
   async findAllById(@Param('idFilm') idFilm: number) {
-    console.log(await this.locationstreamingService.findAllById(idFilm))
     return this.locationstreamingService.findAllById(idFilm);
   }
 
