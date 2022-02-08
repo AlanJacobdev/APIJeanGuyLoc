@@ -98,6 +98,12 @@ export class LocationstreamingService {
     return await this.LocationStreamingRepo.find();
   }
 
+  async findAllById (id : number) {
+    return await this.LocationStreamingRepo.find({ where : {
+      idFilm : id
+    }});
+  }
+
   async findOne(id: number) {
     try {
       return await this.LocationStreamingRepo.findOneOrFail( {
