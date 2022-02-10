@@ -27,7 +27,6 @@ export class FilmController {
     return this.filmService.getAllFilmWithNotes();
   }
 
-
   @Get('commentaires/:id')
   findCommentaires(@Param('id') id: number) {
     return this.filmService.findCommentairesNotesFromFilm(id);

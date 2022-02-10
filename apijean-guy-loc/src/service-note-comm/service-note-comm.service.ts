@@ -43,14 +43,18 @@ export class ServiceNoteCommService {
 
 
     async getNoteFilmFromService(idFilm : number) {
-        let res = [];
+        var res = {};
+        res["infosCommentaires"] = [];
         const notes = await this.NoteRepo.find({where: {idFilm : idFilm}})
         if(notes != undefined){
+            res["nbNotes"] = notes.length;
+            res["nbCommentaires"] = 0;
             for (const note of notes) {
                 const comm =  await this.CommentaireRepo.findOne({where:{idNote : note.idNote}})
                 if (comm != undefined) {
+                    res["nbCommentaires"] += 1;
                     const user = await this.UserRepo.findOne(note.idUtilisateur);
-                    res.push(
+                    res["infosCommentaires"].push(
                     {
                         username : user.pseudonyme,
                         idUtil : user.idUtilisateur,
@@ -115,11 +119,8 @@ export class ServiceNoteCommService {
                 status : HttpStatus.NOT_FOUND,
                 error : 'User doesn\'t publish comments'
             }
-        }
-       
-        
+        }        
     }
-
 
     async getAllFilmWithNotes(){
         let films = await this.FilmRepo.find();
@@ -128,18 +129,5 @@ export class ServiceNoteCommService {
         for (const film of films) {
             const moyenne = null ;
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
 }
