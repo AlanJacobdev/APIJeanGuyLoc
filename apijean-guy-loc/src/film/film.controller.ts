@@ -17,6 +17,11 @@ export class FilmController {
     return this.filmService.findAll();
   }
 
+  @Get("/getInfos/:id")
+  getInfos(@Param('id') id: number) {
+    return this.filmService.getInfos(id);
+  }
+
   @Get("listeFilms/getFilmsWithNote")
   getAllFilmWithNotes() {
     return this.filmService.getAllFilmWithNotes();

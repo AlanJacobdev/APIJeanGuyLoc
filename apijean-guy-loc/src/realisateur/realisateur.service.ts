@@ -69,6 +69,21 @@ export class RealisateurService {
     })
   }
 
+  async getRealisateurByFilm(idFilm: number) {
+    const realisateurs = await this.estRealiseParRepo.find({
+      where : {
+        idFilm : idFilm
+      }
+    })
+
+    if(realisateurs !== undefined) {
+      return realisateurs;
+    }
+    else {
+      return null;
+    }
+  }
+
   async update(idRealisateur: number, updateRealisateurDto: UpdateRealisateurDto) {
     try {
       const Realisateur = await this.realisateurRepo.findOneOrFail(idRealisateur);

@@ -50,6 +50,21 @@ export class ActeurService {
       }, HttpStatus.CONFLICT);
     }
   }
+
+  async getActeursByFilm(idFilm: number) {
+    const acteurs = await this.estActeurDansRepo.find({
+      where : {
+        idFilm : idFilm
+      }
+    })
+
+    if(acteurs !== undefined) {
+      return acteurs;
+    }
+    else {
+      return null;
+    }
+  }
   
   async create(createActeurDto: CreateActeurDto) {
     const acteur = await this.acteurRepo.create(createActeurDto);

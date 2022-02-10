@@ -27,6 +27,21 @@ export class CategorieService {
     }  
   }
 
+  async getCategorieByFilm(idFilm: number) {
+    const categories = await this.estDeCategorieRepo.find({
+      where : {
+        idFilm : idFilm
+      }
+    })
+
+    if(categories !== undefined) {
+      return categories;
+    }
+    else {
+      return null;
+    }
+  }
+
   async addCategorieToFilm(requestCategories_film : RequestCategorie_FilmDto) {
     try {
       // Recherche le film via idFilm

@@ -61,6 +61,46 @@ export class FilmService {
 
   }
 
+  async getInfos(idFilm : number) {
+    const film = await this.findOne(idFilm);
+
+    if(film !== undefined) {
+      const categories = await this.categorieService.getCategorieByFilm(idFilm);
+      const realisateurs = await this.realisateurService.getRealisateurByFilm(idFilm);
+      const acteurs = await this.acteurService.getActeursByFilm(idFilm);
+
+      var res = new Object();      
+      res["idFilm"] = idFilm;
+      res["categories"] = [];
+      res["realisateurs"] = [];
+      res["acteurs"] = [];
+
+      if(categories !== null) {
+        for(const cat of categories) {
+          res["categories"].push(cat.idCategorie);
+        }
+      }
+      
+      if(realisateurs !== null) {
+        for(const real of realisateurs) {
+          res["realisateurs"].push(real.idRealisateur);
+        }
+      }
+
+      if(acteurs !== null) {
+        for(const act of acteurs) {
+          res["acteurs"].push(act.idActeur);
+        }
+      }
+
+      return res;
+    }
+    else {
+      return {err : "idFilm inexistant"};
+    }
+
+  }
+
   async remove(id: number) {
     try {
       const Film = await this.FilmRepo.findOneOrFail(id);
