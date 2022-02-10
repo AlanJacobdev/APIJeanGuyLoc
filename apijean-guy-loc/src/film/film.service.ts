@@ -1,6 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ActeurService } from 'src/acteur/acteur.service';
+import { CategorieService } from 'src/categorie/categorie.service';
 import { NoteService } from 'src/note/note.service';
+import { RealisateurService } from 'src/realisateur/realisateur.service';
 import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Repository } from 'typeorm';
 import { CreateFilmDto } from './dto/create-film.dto';
@@ -10,7 +13,8 @@ import { Film } from './entities/film.entity';
 @Injectable()
 export class FilmService {
   
-  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService, private noteService : NoteService) {}
+  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService, private noteService : NoteService, private acteurService : ActeurService
+  , private realisateurService : RealisateurService, private categorieService : CategorieService) {}
 
   async create(createFilmDto: CreateFilmDto) {
     try{
