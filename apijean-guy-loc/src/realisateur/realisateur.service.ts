@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateRealisateurDto } from './dto/create-realisateur.dto';
 import { UpdateRealisateurDto } from './dto/update-realisateur.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +14,7 @@ export class RealisateurService {
 
   constructor( @InjectRepository(Realisateur) private realisateurRepo : Repository<Realisateur>, 
     @InjectRepository(estRealisePar) private estRealiseParRepo : Repository<estRealisePar>, 
-    private filmService : FilmService  ){}
+    @Inject(forwardRef(() => FilmService)) private filmService : FilmService  ){}
 
   async create(createRealisateurDto: CreateRealisateurDto) {
     const realisateur = await this.realisateurRepo.create(createRealisateurDto);

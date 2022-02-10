@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActeurService } from 'src/acteur/acteur.service';
 import { CategorieService } from 'src/categorie/categorie.service';
@@ -13,8 +13,8 @@ import { Film } from './entities/film.entity';
 @Injectable()
 export class FilmService {
   
-  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService, private noteService : NoteService, private acteurService : ActeurService
-  , private realisateurService : RealisateurService, private categorieService : CategorieService) {}
+  constructor( @InjectRepository(Film) private FilmRepo : Repository<Film>, private serviceNoteComm : ServiceNoteCommService, private noteService : NoteService,  private realisateurService : RealisateurService, private categorieService : CategorieService , @Inject(forwardRef(() => ActeurService)) private acteurService : ActeurService
+  ) {}
 
   async create(createFilmDto: CreateFilmDto) {
     try{

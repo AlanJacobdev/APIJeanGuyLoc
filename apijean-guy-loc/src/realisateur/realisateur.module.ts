@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { RealisateurService } from './realisateur.service';
 import { RealisateurController } from './realisateur.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import { FilmModule } from 'src/film/film.module';
 
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Realisateur, estRealisePar]), FilmModule],
+  imports :[TypeOrmModule.forFeature([Realisateur, estRealisePar]), forwardRef(()=>FilmModule)],
   controllers: [RealisateurController],
   providers: [RealisateurService],
   exports : [RealisateurService]

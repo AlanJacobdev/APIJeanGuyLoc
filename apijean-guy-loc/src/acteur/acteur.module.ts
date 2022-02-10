@@ -7,7 +7,7 @@ import { estActeurDans } from './entities/acteur_film.entity';
 import { FilmModule } from 'src/film/film.module';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Acteur,estActeurDans]), FilmModule],
+  imports :[TypeOrmModule.forFeature([Acteur,estActeurDans]), forwardRef(()=>FilmModule)],
   controllers: [ActeurController],
   providers: [ActeurService],
   exports : [ActeurService]

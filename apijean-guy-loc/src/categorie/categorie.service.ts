@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCategorieDto } from './dto/create-categorie.dto';
@@ -12,7 +12,7 @@ import { RequestCategorie_FilmDto } from './dto/request-categories_film.dto';
 @Injectable()
 export class CategorieService {
   
-  constructor( @InjectRepository(Categorie) private categorieRepo : Repository<Categorie>, @InjectRepository(estDeCategorie) private estDeCategorieRepo : Repository<estDeCategorie>, private filmService : FilmService  ){}
+  constructor( @InjectRepository(Categorie) private categorieRepo : Repository<Categorie>, @InjectRepository(estDeCategorie) private estDeCategorieRepo : Repository<estDeCategorie>, @Inject(forwardRef(() => FilmService)) private filmService : FilmService  ){}
 
   async create(createCategorieDto: CreateCategorieDto) {
     try{

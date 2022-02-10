@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CategorieService } from './categorie.service';
 import { CategorieController } from './categorie.controller';
 import { Categorie } from './entities/categorie.entity';
@@ -8,7 +8,7 @@ import { FilmModule } from 'src/film/film.module';
 
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Categorie, estDeCategorie]), FilmModule],
+  imports :[TypeOrmModule.forFeature([Categorie, estDeCategorie]), forwardRef(()=>FilmModule)],
   controllers: [CategorieController],
   providers: [CategorieService],
   exports : [CategorieService]
