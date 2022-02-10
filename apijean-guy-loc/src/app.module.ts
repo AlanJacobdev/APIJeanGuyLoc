@@ -19,10 +19,11 @@ import { Film } from './film/entities/film.entity';
 import { Note } from './note/entities/note.entity';
 import { Utilisateur } from './utilisateur/entities/utilisateur.entity';
 import { AuthModule } from './auth/auth.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([Commentaire, Film, Note, Utilisateur]), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule, CommentaireModule, LocationstreamingModule, LocationphysiqueModule, AuthModule,
+    TypeOrmModule.forRoot(config), TypeOrmModule.forFeature([Commentaire, Film, Note, Utilisateur]), UtilisateurModule, ActeurModule, RealisateurModule, NoteModule, FilmModule, TypefilmModule, CategorieModule, CommentaireModule, LocationstreamingModule, LocationphysiqueModule, AuthModule, StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ServiceNoteCommService],
