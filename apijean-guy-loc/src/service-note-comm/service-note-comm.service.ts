@@ -42,29 +42,44 @@ export class ServiceNoteCommService {
     // }
 
 
-    async getNoteFilmFromService(idFilm : number) {
+    async getNoteFilmFromService(idFilm : number, idUtilisateur : number) {
         var res = {};
         res["infosCommentaires"] = [];
         const notes = await this.NoteRepo.find({where: {idFilm : idFilm}})
         if(notes != undefined){
             res["nbNotes"] = notes.length;
             res["nbCommentaires"] = 0;
+            res["idCommUtilisateur"]  = null;
+            res["idNoteUtilisateur"]  = null;
+
             for (const note of notes) {
+                const user = await this.UserRepo.findOne(note.idUtilisateur);
                 const comm =  await this.CommentaireRepo.findOne({where:{idNote : note.idNote}})
+                var resultat = {
+                    username : user.pseudonyme,
+                    idUtil : user.idUtilisateur,
+                    valeurNote : note.valeur,
+                    idNote : note.idNote,
+                    dateCom : null,
+                    textCom : null,
+                    idCom : null
+                };
+
                 if (comm != undefined) {
                     res["nbCommentaires"] += 1;
-                    const user = await this.UserRepo.findOne(note.idUtilisateur);
-                    res["infosCommentaires"].push(
-                    {
-                        username : user.pseudonyme,
-                        idUtil : user.idUtilisateur,
-                        valeurNote : note.valeur,
-                        dateCom :comm.dateCommentaire ,
-                        textCom : comm.contenu,
-                        idCom : comm.idNote
+                    resultat["dateCom"] = comm.dateCommentaire;
+                    resultat["textCom"] = comm.contenu;
+                    resultat["idCom"] = comm.idCommentaire;
+
+                    if(+note.idUtilisateur == idUtilisateur) {
+                        res["idCommUtilisateur"] = comm.idCommentaire;
                     }
-                    )
                 }
+
+                if(+note.idUtilisateur == idUtilisateur) {
+                    res["idNoteUtilisateur"] = note.idNote;
+                }
+                res["infosCommentaires"].push(resultat);
             }
             return res;
         } else {

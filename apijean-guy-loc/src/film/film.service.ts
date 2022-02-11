@@ -33,8 +33,8 @@ export class FilmService {
     return await this.FilmRepo.find();
   }
 
-  async findCommentairesNotesFromFilm(idFilm: number) {
-    return await this.serviceNoteComm.getNoteFilmFromService(idFilm);
+  async findCommentairesNotesFromFilm(idFilm: number, idUtilisateur : number) {
+    return await this.serviceNoteComm.getNoteFilmFromService(idFilm, idUtilisateur);
   }
   
   findOne(id: number) {
