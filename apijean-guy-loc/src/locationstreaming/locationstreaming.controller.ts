@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { LocationstreamingService } from './locationstreaming.service';
 import { CreateLocationstreamingDto } from './dto/create-locationstreaming.dto';
 import { UpdateLocationstreamingDto } from './dto/update-locationstreaming.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('locationstreaming')
 export class LocationstreamingController {
   constructor(private readonly locationstreamingService: LocationstreamingService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createLocationstreamingDto: CreateLocationstreamingDto) {
     return this.locationstreamingService.create(createLocationstreamingDto);
@@ -44,14 +46,14 @@ export class LocationstreamingController {
   }
   
 
-
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateLocationstreamingDto: UpdateLocationstreamingDto) {
     return this.locationstreamingService.update(+id, updateLocationstreamingDto);
   }
 
   
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.locationstreamingService.remove(+id);
