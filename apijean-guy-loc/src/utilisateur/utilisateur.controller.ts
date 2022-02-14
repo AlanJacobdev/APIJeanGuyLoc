@@ -23,6 +23,10 @@ export class UtilisateurController {
     return this.utilisateurService.findOne(login, pass);
   }
 
+  @Get('/:id')
+  findOneById(@Param('id') id: number) {
+    return this.utilisateurService.findOneById(id);
+  }
 
   @Put(':id')
   update(@Param('id') id: number, @Body() updateUtilisateurDto: Partial<UpdateUtilisateurDto>) {
