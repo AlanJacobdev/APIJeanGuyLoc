@@ -152,4 +152,13 @@ export class FilmService {
     }
   }
 
+  async getAffiche (id : number) {
+    return this.FilmRepo.findOne({
+      select : ['lienImage', 'titre'],
+      where : {
+        idFilm : id
+      }
+    })
+  }
+
 }

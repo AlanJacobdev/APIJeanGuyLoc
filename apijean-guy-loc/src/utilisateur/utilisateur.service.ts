@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LocationphysiqueService } from 'src/locationphysique/locationphysique.service';
+import { LocationstreamingService } from 'src/locationstreaming/locationstreaming.service';
 import { Repository } from 'typeorm';
 import { CreateUtilisateurDto } from './dto/create-utilisateur.dto';
 import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
@@ -8,7 +10,8 @@ import { Utilisateur } from './entities/utilisateur.entity';
 @Injectable()
 export class UtilisateurService {
   
-  constructor( @InjectRepository(Utilisateur) private utilisateurRepo : Repository<Utilisateur>  ){}
+  constructor( @InjectRepository(Utilisateur) private utilisateurRepo : Repository<Utilisateur>, private locationStreamingService : LocationstreamingService,
+                private locationPhysiqueService : LocationphysiqueService ){}
   
   async create(createUtilisateurDto: CreateUtilisateurDto)  {
     const pseudo = this.findOneByPseudo(createUtilisateurDto.pseudonyme);
@@ -81,6 +84,17 @@ export class UtilisateurService {
     
     await this.utilisateurRepo.delete(id);
     return {delete : true};
+  }
+
+  async getFilmsByUser(id : number) {
+    
+    const filmsPhysique = await this.locationPhysiqueService.getFilmsByUser(id);
+    const filmsStreaming = await this.locationStreamingService.getFilmsByUser(id);
+    let res = {
+      filmsPhysique,
+      filmsStreaming
+    }
+    return res;
   }
 }
 

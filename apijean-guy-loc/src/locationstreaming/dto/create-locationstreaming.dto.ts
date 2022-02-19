@@ -8,7 +8,7 @@ export class CreateLocationstreamingDto {
     dateDeLocation : Date;
     
     @IsNotEmpty()
-    duree : string;
+    duree : number;
 
     @IsNotEmpty()
     idUtilisateur : Utilisateur;

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { LocationstreamingService } from './locationstreaming.service';
 import { LocationstreamingController } from './locationstreaming.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import { FilmModule } from 'src/film/film.module';
 import { UtilisateurModule } from 'src/utilisateur/utilisateur.module';
 
 @Module({
-  imports :[TypeOrmModule.forFeature([Locationstreaming]),FilmModule, UtilisateurModule],
+  imports :[TypeOrmModule.forFeature([Locationstreaming]),FilmModule, forwardRef(() =>UtilisateurModule)],
   controllers: [LocationstreamingController],
   providers: [LocationstreamingService],
   exports : [LocationstreamingService]

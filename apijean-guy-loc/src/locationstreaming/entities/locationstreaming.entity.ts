@@ -11,8 +11,8 @@ export class Locationstreaming {
     @Column({type : "date"})
     dateDeLocation : Date;
     
-    @Column() 
-    duree : string;
+    @Column({type :"int"}) 
+    duree : number;
 
     @Column({ unique: false })
     @ManyToOne(() => Utilisateur)

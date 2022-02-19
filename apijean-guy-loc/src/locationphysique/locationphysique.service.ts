@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { FilmService } from 'src/film/film.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
-import { Repository } from 'typeorm';
+import { Between, MoreThan, Repository } from 'typeorm';
 import { CreateLocationphysiqueDto } from './dto/create-locationphysique.dto';
 import { UpdateLocationphysiqueDto } from './dto/update-locationphysique.dto';
 import { Locationphysique } from './entities/locationphysique.entity';
 
 import * as Moment from 'moment';
-import { extendMoment } from 'moment-range';
+import { DateRange, extendMoment } from 'moment-range';
 import { Like } from 'typeorm';
 
 const moment = extendMoment(Moment);
@@ -18,7 +18,7 @@ const moment = extendMoment(Moment);
 @Injectable()
 export class LocationphysiqueService {
   
-  constructor( @InjectRepository(Locationphysique) private LocationPhysiqueRepo : Repository<Locationphysique>, private filmservice : FilmService, private utilisateurservice: UtilisateurService ) {}
+  constructor( @InjectRepository(Locationphysique) private LocationPhysiqueRepo : Repository<Locationphysique>, private filmservice : FilmService, @Inject(forwardRef(() => UtilisateurService)) private utilisateurservice: UtilisateurService ) {}
 
   
   async create(createLocationphysiqueDto: CreateLocationphysiqueDto) {
@@ -262,6 +262,56 @@ export class LocationphysiqueService {
         }
         return calendar;
  
+  }
+
+
+  async getFilmsByUser( idUser : number) {
+    let res = {};
+    res["LocPhysiqueNow"] = [];
+    res["LocPhysiqueOlder"] = [];
+    res["LocPhysiqueCome"] = [];
+    const date = new Date();
+    const filmsPhysique = await this.LocationPhysiqueRepo.find({ where : {
+      idUtilisateur : idUser
+    }})
+
+    let filmStruc = {
+      idLocationFilm: -1 ,
+      dateDeLocation: new Date(),
+      duree:-1,
+      idUtilisateur:-1 ,
+      idFilm: -1,
+      estRendu : false,
+      affiche : "",
+      titre : ""
+    }
+
+    for( const film of filmsPhysique) {
+      const afficheFilm = await this.filmservice.getAffiche(+film.idFilm);
+      const dateDebut = new Date(film.dateDeLocation);
+      filmStruc = {
+        idLocationFilm: film.idLocationFilm ,
+        dateDeLocation: film.dateDeLocation,
+        duree:film.duree,
+        idUtilisateur: +film.idUtilisateur ,
+        idFilm: +film.idFilm,
+        estRendu : film.estRendu,
+        affiche : afficheFilm.lienImage,
+        titre : afficheFilm.titre
+      }
+
+      let dateFin = new Date(film.dateDeLocation);
+      dateFin.setDate(dateDebut.getDate()+film.duree);
+      if ((dateDebut <= date && date <= dateFin ) && !(film.estRendu)){
+        res["LocPhysiqueNow"].push(filmStruc);
+      } else if(date > dateFin || film.estRendu) {
+        res["LocPhysiqueOlder"].push(filmStruc);
+      } else {
+        res["LocPhysiqueCome"].push(filmStruc);
+      }
+    }
+    
+    return res;
   }
   
 }

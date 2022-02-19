@@ -28,6 +28,11 @@ export class UtilisateurController {
     return this.utilisateurService.findOneById(id);
   }
 
+  @Get('/profil/getFilmsByUser/:id')
+  getFilmsByUser(@Param('id') id: number) {
+    return this.utilisateurService.getFilmsByUser(id);
+  }
+
   @Put(':id')
   update(@Param('id') id: number, @Body() updateUtilisateurDto: Partial<UpdateUtilisateurDto>) {
     return this.utilisateurService.update(id, updateUtilisateurDto);

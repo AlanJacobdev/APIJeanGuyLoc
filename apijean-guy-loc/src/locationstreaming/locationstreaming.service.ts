@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilmService } from 'src/film/film.service';
 import { UtilisateurService } from 'src/utilisateur/utilisateur.service';
@@ -9,7 +9,7 @@ import { Locationstreaming } from './entities/locationstreaming.entity';
 
 @Injectable()
 export class LocationstreamingService {
-  constructor( @InjectRepository(Locationstreaming) private LocationStreamingRepo : Repository<Locationstreaming>, private filmservice : FilmService, private utilisateurservice: UtilisateurService  ) {}
+  constructor( @InjectRepository(Locationstreaming) private LocationStreamingRepo : Repository<Locationstreaming>, private filmservice : FilmService, @Inject(forwardRef(() => UtilisateurService))  private utilisateurservice: UtilisateurService  ) {}
 
   async create(createLocationstreamingDto: CreateLocationstreamingDto) {
     try{
@@ -150,7 +150,7 @@ export class LocationstreamingService {
     for (let i = 0; i < tabRes.length; i++) {
       let dateDebut = new Date(tabRes[i].dateDeLocation);
       let dateFin = new Date(tabRes[i].dateDeLocation);
-      await dateFin.setDate(dateFin.getDate()+parseInt(tabRes[i].duree));   
+      dateFin.setDate(dateFin.getDate() + tabRes[i].duree);   
       if ( dateNew >= dateDebut && dateNew <= dateFin ){
         return tabRes[i];
       }
@@ -188,5 +188,55 @@ export class LocationstreamingService {
     await this.LocationStreamingRepo.delete(id);
     return {delete : true};
   }
+
+
+  async getFilmsByUser( idUser : number) {
+    let res = {};
+    res["LocStreamingNow"] = [];
+    res["LocStreamingOlder"] = [];
+    res["LocStreamingCome"] = [];
+    const date = new Date();
+    const filmsStreaming = await this.LocationStreamingRepo.find({ where : {
+      idUtilisateur : idUser
+    }})
+
+    let filmStruc = {
+      idLocationStreaming: -1 ,
+      dateDeLocation: new Date() ,
+      duree: -1 ,
+      idUtilisateur: -1 ,
+      idFilm: -1,
+      affiche : "",
+      titre : ""
+    }
+
+
+    for( const film of filmsStreaming) {
+      const afficheFilm = await this.filmservice.getAffiche(+film.idFilm);
+      filmStruc = {
+        idLocationStreaming: film.idLocationStreaming ,
+        dateDeLocation: film.dateDeLocation ,
+        duree: film.duree ,
+        idUtilisateur: +film.idUtilisateur,
+        idFilm: +film.idFilm,
+        affiche : afficheFilm.lienImage,
+        titre : afficheFilm.titre
+      }
+      const dateDebut = new Date(film.dateDeLocation);
+      let dateFin = new Date(film.dateDeLocation);
+      dateFin.setDate(dateDebut.getDate()+film.duree);
+      if (dateDebut <= date && date <= dateFin){
+        res["LocStreamingNow"].push(filmStruc);
+      } else if(date > dateDebut) {
+        res["LocStreamingOlder"].push(filmStruc);
+      } else {
+        res["LocStreamingCome"].push(filmStruc);
+      }
+    }
+    
+    return res;
+  }
+
+  
 
 }
