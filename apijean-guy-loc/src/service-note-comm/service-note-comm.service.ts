@@ -112,15 +112,17 @@ export class ServiceNoteCommService {
 
     async getCommentaireByUser( idUser : number){
         let res = [];
-        const notes  = await this.NoteRepo.find({where :{idUtilisateur : idUser}});
+        const notes  = await this.NoteRepo.find({where :{idUtilisateur : idUser},select: ['valeur','idNote','idFilm']});
         if (notes != undefined && notes.length !== 0) {
             for (const note of notes) {
-                const comm = await this.CommentaireRepo.findOne({where:{idNote : note.idNote}})
+                const comm = await this.CommentaireRepo.findOne({where:{idNote : note.idNote}, select: ['dateCommentaire','contenu']})  
                 if( comm != undefined) {
-                    const film = await this.FilmRepo.findOne({where:{idFilm : note.idFilm}})
+                    const film = await this.FilmRepo.findOne({where:{idFilm : note.idFilm},select: ['idFilm','titre','lienImage']})
+                    
                     res.push({
                         note: note.valeur,
                         commentaire : comm.contenu,
+                        date : comm.dateCommentaire,
                         idFilm : film.idFilm,
                         nomFilm : film.titre,
                         lienImage : film.lienImage
@@ -137,12 +139,4 @@ export class ServiceNoteCommService {
         }        
     }
 
-    async getAllFilmWithNotes(){
-        let films = await this.FilmRepo.find();
-        let res = [];
-
-        for (const film of films) {
-            const moyenne = null ;
-        }
-    }
 }

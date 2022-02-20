@@ -96,6 +96,17 @@ export class UtilisateurService {
     }
     return res;
   }
+
+
+
+  getPseudo (id :number) {
+    return this.utilisateurRepo.findOne({
+      where : {
+        idUtilisateur : id
+      },
+      select : ['pseudonyme']
+    })
+  }
 }
 
 

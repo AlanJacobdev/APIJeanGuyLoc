@@ -20,12 +20,18 @@ export class UtilisateurController {
 
   @Get('/:login/:pass')
   findOne(@Param('login') login: string, @Param('pass') pass: string) {
+
     return this.utilisateurService.findOne(login, pass);
   }
 
   @Get('/:id')
   findOneById(@Param('id') id: number) {
     return this.utilisateurService.findOneById(id);
+  }
+
+  @Get('/commentaire/getPseudo/:id')
+  getPseudo(@Param('id') id: number) {
+    return this.utilisateurService.getPseudo(id);
   }
 
   @Get('/profil/getFilmsByUser/:id')
