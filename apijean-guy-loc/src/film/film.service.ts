@@ -77,7 +77,7 @@ export class FilmService {
 
       if(categories !== null) {
         for(const cat of categories) {
-          res["categories"].push(cat.idCategorie);
+          res["categories"].push(cat.idCategorie); 
         }
       }
       
