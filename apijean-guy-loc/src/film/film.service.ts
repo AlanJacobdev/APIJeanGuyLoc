@@ -134,14 +134,27 @@ export class FilmService {
     let res = [];
     if (films != undefined) {
       for (const film of films) {
-          let moyenne = await this.noteService.getMoyenneByIdFilm(film.idFilm) ;
-            res.push({
-              idFilm : film.idFilm,
-              titre : film.titre,
-              lienImage : film.lienImage,
-              synopsis : film.synopsis,
-              moyenne : moyenne
-            })
+        var objFilm = {
+          idFilm : film.idFilm,
+          titre : film.titre,
+          lienImage : film.lienImage,
+          synopsis : film.synopsis,
+          moyenne : null,
+          categories : [],
+          type : film.idTypeFilm
+        };
+
+        const categories = await this.categorieService.getCategorieByFilm(film.idFilm);
+        if(categories !== null) {
+            for(const cat of categories) {
+              objFilm["categories"].push(cat.idCategorie); 
+            }
+        }
+
+        let moyenne = await this.noteService.getMoyenneByIdFilm(film.idFilm);
+        objFilm["moyenne"] = moyenne;
+
+        res.push({ objFilm });
       }
       return res;
     } else {
