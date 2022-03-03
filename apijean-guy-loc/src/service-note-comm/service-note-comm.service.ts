@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Commentaire } from 'src/commentaire/entities/commentaire.entity';
 import { Film } from 'src/film/entities/film.entity';
+import { UpdateNoteDto } from 'src/note/dto/update-note.dto';
 import { Note } from 'src/note/entities/note.entity';
 import { Utilisateur } from 'src/utilisateur/entities/utilisateur.entity';
 import { Repository } from 'typeorm';
@@ -91,6 +92,9 @@ export class ServiceNoteCommService {
 
     }
 
+    async updateNote(idNote : number, updateNoteDto : UpdateNoteDto) {
+        this.NoteRepo.update(idNote, updateNoteDto);
+    }
     
     async getFilmFromService(idFilm : number) {
         const film = this.FilmRepo.findOne({
