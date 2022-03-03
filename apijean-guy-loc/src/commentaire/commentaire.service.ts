@@ -1,10 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdateNoteDto } from 'src/note/dto/update-note.dto';
+import { Note } from 'src/note/entities/note.entity';
 import { NoteService } from 'src/note/note.service';
 import { ServiceNoteCommService } from 'src/service-note-comm/service-note-comm.service';
 import { Repository } from 'typeorm';
 import { CreateCommentaireDto } from './dto/create-commentaire.dto';
 import { UpdateCommentaireDto } from './dto/update-commentaire.dto';
+import { UpdateCommentaireNoteDto } from './dto/update-commentaireNote.dto';
 import { Commentaire } from './entities/commentaire.entity';
 
 @Injectable()
@@ -49,16 +52,32 @@ export class CommentaireService {
     }  
   }
 
-  async update(id: number, updateCommentaireDto: UpdateCommentaireDto) {
+  async update(id: number, updateCommentaireNoteDto: UpdateCommentaireNoteDto) {
     try {
-      const categorie = await this.commentaireRepo.findOneOrFail(id);
+      const commentaire = await this.commentaireRepo.findOneOrFail(id);
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
         error: 'Identifier Not Found',
       }, HttpStatus.NOT_FOUND);
     }
-    
+
+    console.log(updateCommentaireNoteDto);
+
+    let updateCommentaireDto : UpdateCommentaireDto = {
+        idNote : updateCommentaireNoteDto.idNote,
+        dateCommentaire : updateCommentaireNoteDto.dateCommentaire,
+        contenu : updateCommentaireNoteDto.contenu
+    }
+
+    let note : Note = await this.serviceNoteComm.getNoteFromService(+updateCommentaireNoteDto.idNote);
+    let updateNoteDto : UpdateNoteDto = {
+      idFilm : note.idFilm,
+      idUtilisateur : note.idUtilisateur,
+      valeur : updateCommentaireNoteDto.valeurNote
+    }
+
+    await this.serviceNoteComm.updateNote(note.idNote, updateNoteDto);
     await this.commentaireRepo.update(id, updateCommentaireDto);
     return await this.commentaireRepo.findOne(id)  
   }

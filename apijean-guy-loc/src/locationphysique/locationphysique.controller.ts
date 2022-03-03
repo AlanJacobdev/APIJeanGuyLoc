@@ -19,6 +19,11 @@ export class LocationphysiqueController {
     return this.locationphysiqueService.findAll();
   }
 
+  @Get("/rendu/getFilmsLoueNow/:id")
+  getFilmsLoueNow(@Param('id') id: number) {
+    return this.locationphysiqueService.getFilmsLoueNow(id)
+  }
+
   @Get('dispo/:id')
   getDisponibilite(@Param('id') id: number) {
     return this.locationphysiqueService.dispoPerMonth(id);
