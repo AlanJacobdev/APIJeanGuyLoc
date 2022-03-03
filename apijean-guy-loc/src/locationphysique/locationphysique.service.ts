@@ -206,6 +206,8 @@ export class LocationphysiqueService {
     return {delete : true};
   }
 
+  
+
   async dispoPerMonth(id:number) {
     
         var date = new Date();
@@ -313,5 +315,52 @@ export class LocationphysiqueService {
     
     return res;
   }
+
+  async getFilmsLoueNow( idUser : number) {
+    let res = [];
+    
+    const date = new Date();
+    const filmsPhysique = await this.LocationPhysiqueRepo.find({ where : {
+      idUtilisateur : idUser
+    }})
+
+    let filmStruc = {
+      idLocationFilm: -1 ,
+      dateDeLocation: new Date(),
+      duree:-1,
+      idUtilisateur:-1 ,
+      idFilm: -1,
+      estRendu : false,
+      affiche : "",
+      titre : ""
+    }
+
+    for( const film of filmsPhysique) {
+      const afficheFilm = await this.filmservice.getAffiche(+film.idFilm);
+      const dateDebut = new Date(film.dateDeLocation);
+      filmStruc = {
+        idLocationFilm: film.idLocationFilm ,
+        dateDeLocation: film.dateDeLocation,
+        duree:film.duree,
+        idUtilisateur: +film.idUtilisateur ,
+        idFilm: +film.idFilm,
+        estRendu : film.estRendu,
+        affiche : afficheFilm.lienImage,
+        titre : afficheFilm.titre
+      }
+
+      let dateFin = new Date(film.dateDeLocation);
+      dateFin.setDate(dateDebut.getDate()+film.duree);
+      if ((dateDebut <= date && date <= dateFin ) && !(film.estRendu)){
+        res.push(filmStruc);
+      } 
+    }
+    
+    return res;
+  }
+
+
+
+
   
 }

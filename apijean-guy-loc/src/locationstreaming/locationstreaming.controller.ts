@@ -53,7 +53,7 @@ export class LocationstreamingController {
   }
 
   
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.locationstreamingService.remove(+id);
