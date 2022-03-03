@@ -22,6 +22,7 @@ export class FilmService {
       await this.FilmRepo.save(film);
       return film;
     } catch (e) {
+      console.log(e)
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: e,

@@ -27,6 +27,7 @@ export class LocationstreamingService {
            error: "Unknow User"}
          } else {
            if (await this.findIfAlreadyExist(+createLocationstreamingDto.idFilm, +createLocationstreamingDto.idUtilisateur, createLocationstreamingDto.dateDeLocation) === undefined){
+           
             const film = this.LocationStreamingRepo.create(createLocationstreamingDto);
             await this.LocationStreamingRepo.save(film);
             return film;

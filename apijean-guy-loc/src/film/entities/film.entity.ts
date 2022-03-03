@@ -31,7 +31,7 @@ export class Film {
     @Column()
     duree : number
 
-    @Column('date') 
+    @Column({type : "date"}) 
     dateSortie : Date
 
     @ManyToMany(type => Categorie, categorie => categorie.films)
