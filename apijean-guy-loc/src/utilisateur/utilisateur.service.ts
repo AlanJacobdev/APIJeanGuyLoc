@@ -14,8 +14,9 @@ export class UtilisateurService {
                 private locationPhysiqueService : LocationphysiqueService ){}
   
   async create(createUtilisateurDto: CreateUtilisateurDto)  {
-    const pseudo = this.findOneByPseudo(createUtilisateurDto.pseudonyme);
-    if (pseudo == undefined) {
+    const pseudo = await this.findOneByPseudo(createUtilisateurDto.pseudonyme);
+    console.log(pseudo);
+    if (pseudo === undefined) {
         const utilisateur = this.utilisateurRepo.create(createUtilisateurDto);
         await this.utilisateurRepo.save(utilisateur);
         return utilisateur;
